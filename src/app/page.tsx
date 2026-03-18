@@ -1,4 +1,3 @@
-import React from 'react';
 import Hero from '@/components/home/Hero';
 import ImpactTracker from '@/components/home/ImpactTracker';
 import ExpectationsReality from '@/components/home/ExpectationsReality';
