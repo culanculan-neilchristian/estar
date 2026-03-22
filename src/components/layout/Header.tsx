@@ -26,7 +26,7 @@ const Header = () => {
                         {['Home', 'About Us', 'The Movement', 'Stories', 'Donate', 'Contact'].map((item) => (
                             <li key={item}>
                                 <Link 
-                                    href={`/${item.toLowerCase().replace(/\s+/g, '-')}`}
+                                    href={item === 'Home' ? '/' : `/${item.toLowerCase().replace(/\s+/g, '-')}`}
                                     className="text-sm font-medium text-white/80 hover:text-white transition-colors duration-200 tracking-wide"
                                 >
                                     {item}
