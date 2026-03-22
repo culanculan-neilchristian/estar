@@ -40,7 +40,7 @@ const NakhonSawanSvgMap: React.FC<NakhonSawanSvgMapProps> = ({
 
     return (
         <div 
-            className="relative w-full h-full rounded-3xl overflow-hidden group flex items-center justify-center p-0 select-none"
+            className="relative w-full h-full rounded-3xl group flex items-center justify-center p-0 select-none"
             onMouseMove={handleMouseMove}
         >
             <svg 
