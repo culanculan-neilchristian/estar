@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Church, Megaphone, UserRound } from 'lucide-react';
 import Container from '@/components/layout/Container';
+import CountUp from '../ui/CountUp';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
 import NakhonSawanSvgMap from './NakhonSawanSvgMap';
 
@@ -25,11 +26,11 @@ const ExponentialResults = () => {
     return (
         <section ref={ref} className="bg-black py-24 border-t border-white/5 overflow-hidden">
             <Container>
-                <div className="flex flex-col lg:flex-row gap-16 lg:gap-24 items-center">
+                <div className="flex flex-col lg:flex-row gap-8 items-center">
                     {/* Left: Interactive Map Visualization */}
-                    <div className="w-full lg:w-[60%]">
-                        <div className={`relative aspect-[4/3] w-full rounded-3xl overflow-hidden bg-[#1A1A1A] reveal-on-scroll scale-in ${isVisible ? 'is-visible' : ''}`}>
-                            <div className="absolute inset-0 p-8">
+                    <div className="w-full lg:w-[50%]">
+                        <div className={`relative aspect-[4/3] w-full reveal-on-scroll scale-in ${isVisible ? 'is-visible' : ''}`}>
+                            <div className="absolute inset-0">
                                 <NakhonSawanSvgMap 
                                     activeStep={2}
                                     activeDistrict={selectedDistrict}
@@ -41,7 +42,7 @@ const ExponentialResults = () => {
                     </div>
 
                     {/* Right: Content & Stats */}
-                    <div className="w-full lg:w-[40%]">
+                    <div className="w-full lg:w-[50%]">
                         <div className="max-w-xl">
                             <h2 className={`heading-1 mb-8 text-white leading-[1.1] reveal-on-scroll fade-up ${isVisible ? 'is-visible' : ''}`}>Exponential Results Beyond</h2>
                             <div className="space-y-6 mb-12">
@@ -67,7 +68,13 @@ const ExponentialResults = () => {
                                         <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-4 text-black shadow-xl">
                                             <stat.icon size={28} />
                                         </div>
-                                        <span className="text-2xl font-black text-white">{stat.value}</span>
+                                        <span className="text-2xl font-black text-white">
+                                            {isVisible ? (
+                                                <CountUp end={parseFloat(stat.value.replace(/,/g, ''))} duration={1500} />
+                                            ) : (
+                                                "0"
+                                            )}
+                                        </span>
                                         <span className="text-[9px] font-black text-white/30 uppercase tracking-[0.2em] mt-1">{stat.label}</span>
                                     </div>
                                 ))}

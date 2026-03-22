@@ -5,6 +5,7 @@ import { Church, Megaphone, UserRound } from 'lucide-react';
 import Container from '@/components/layout/Container';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
 import NakhonSawanSvgMap from './NakhonSawanSvgMap';
+import CountUp from '../ui/CountUp';
 
 interface DistrictResult {
     name: string;
@@ -49,7 +50,7 @@ const ACTUAL_DATA: ResultData = {
 
 
 
-const ResultCard = ({ data }: { data: ResultData }) => {
+const ResultCard = ({ data, isVisible }: { data: ResultData; isVisible: boolean }) => {
     // Map the ResultData to DistrictStats format for the SVG map component
     const mapStats = data.districts.map(d => ({
         id: d.name.toLowerCase().replace(/\s+/g, '-'),
@@ -79,21 +80,27 @@ const ResultCard = ({ data }: { data: ResultData }) => {
                 <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center mb-3">
                     <Church className="w-6 h-6 text-black" />
                 </div>
-                <span className="text-2xl font-black text-white">{data.churches}</span>
+                <span className="text-2xl font-black text-white">
+                    {isVisible ? <CountUp end={data.churches} duration={1500} /> : '0'}
+                </span>
                 <span className="text-[9px] font-black text-white/30 uppercase tracking-widest mt-1">CHURCHES</span>
             </div>
             <div className="flex flex-col items-center">
                 <div className="w-14 h-14 bg-white/10 border border-white/10 rounded-full flex items-center justify-center mb-3">
                     <Megaphone className="w-6 h-6 text-white" />
                 </div>
-                <span className="text-2xl font-black text-white">{data.members}</span>
+                <span className="text-2xl font-black text-white">
+                    {isVisible ? <CountUp end={parseFloat(data.members.replace(/,/g, ''))} duration={1500} /> : '0'}
+                </span>
                 <span className="text-[9px] font-black text-white/30 uppercase tracking-widest mt-1">MEMBERS</span>
             </div>
             <div className="flex flex-col items-center">
                 <div className="w-14 h-14 bg-white/10 border border-white/10 rounded-full flex items-center justify-center mb-3">
                     <UserRound className="w-6 h-6 text-white" />
                 </div>
-                <span className="text-2xl font-black text-white">{data.believers}</span>
+                <span className="text-2xl font-black text-white">
+                    {isVisible ? <CountUp end={parseFloat(data.believers.replace(/,/g, ''))} duration={1500} /> : '0'}
+                </span>
                 <span className="text-[9px] font-black text-white/30 uppercase tracking-widest mt-1">BELIEVERS</span>
             </div>
             </div>
@@ -118,10 +125,10 @@ const ExpectationsReality = () => {
 
                 <div className="flex flex-col lg:flex-row gap-8">
                     <div className={`flex-1 reveal-on-scroll scale-in delay-200 ${isVisible ? 'is-visible' : ''}`}>
-                        <ResultCard data={EXPECTED_DATA} />
+                        <ResultCard data={EXPECTED_DATA} isVisible={isVisible} />
                     </div>
                     <div className={`flex-1 reveal-on-scroll scale-in delay-400 ${isVisible ? 'is-visible' : ''}`}>
-                        <ResultCard data={ACTUAL_DATA} />
+                        <ResultCard data={ACTUAL_DATA} isVisible={isVisible} />
                     </div>
                 </div>
             </Container>

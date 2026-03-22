@@ -50,28 +50,31 @@ body {
     @apply text-[9px] font-bold text-white/40 tracking-[0.1em] uppercase leading-tight line-clamp-2;
   }
 }
-@layer utilities {
-  .reveal-on-scroll {
-    opacity: 0;
-    
-    // Playful Fade Up
-    &.fade-up {
-      transform: translateY(30px);
-      transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1), transform 1s cubic-bezier(0.22, 1, 0.36, 1);
-    }
 
-    // Playful Scale In
-    &.scale-in {
-      transform: scale(0.95);
-      transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1), transform 1s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    
-    &.is-visible {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
+// Scroll Reveal Animations
+.reveal-on-scroll {
+  opacity: 0;
+  will-change: transform, opacity;
+  
+  // Playful Fade Up
+  &.fade-up {
+    transform: translateY(30px);
+    transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1), transform 1s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
+  // Playful Scale In
+  &.scale-in {
+    transform: scale(0.95);
+    transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1), transform 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  
+  &.is-visible {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+@layer utilities {
   // Staggered Delays
   .delay-100 { transition-delay: 100ms !important; }
   .delay-200 { transition-delay: 200ms !important; }

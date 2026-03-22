@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Church, Megaphone, UserRound } from 'lucide-react';
 import Container from '@/components/layout/Container';
+import CountUp from '../ui/CountUp';
 import { NAKHON_SAWAN_DUMMY_DATA } from '@/data/dummyProvinceData';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
 import NakhonSawanSvgMap from './NakhonSawanSvgMap';
@@ -36,7 +37,7 @@ const ImpactTracker = () => {
             <Container>
                 <div className="flex flex-col lg:flex-row gap-16 lg:gap-24">
                     {/* Left: Timeline */}
-                    <div className="w-full lg:w-[35%]">
+                    <div className="w-full lg:w-[40%]">
                         <div className={`mb-12 reveal-on-scroll fade-up ${isVisible ? 'is-visible' : ''}`}>
                             <h2 className="text-5xl font-black mb-6 text-white tracking-tighter">Nakhon Sawan</h2>
                             <p className="paragraph max-w-2xl text-white/50 leading-relaxed italic">
@@ -80,8 +81,8 @@ const ImpactTracker = () => {
                     </div>
 
                     {/* Right: Interactive SVG Map */}
-                    <div className="w-full lg:w-[65%] flex flex-col justify-center gap-12">
-                        <div className={`relative w-full aspect-[4/3] rounded-3xl overflow-hidden border border-white/5 group reveal-on-scroll scale-in delay-300 ${isVisible ? 'is-visible' : ''}`}>
+                    <div className="w-full lg:w-[60%] flex flex-col justify-center gap-12">
+                        <div className={`relative w-full aspect-[4/3]  group reveal-on-scroll scale-in delay-300 ${isVisible ? 'is-visible' : ''}`}>
                             <NakhonSawanSvgMap 
                                 activeStep={activeStep}
                                 activeDistrict={selectedDistrictName}
@@ -102,7 +103,11 @@ const ImpactTracker = () => {
                                         <stat.icon className="w-12 h-12 text-black transition-transform duration-500 group-hover:rotate-12" />
                                     </div>
                                     <span className="text-3xl font-black text-white mb-2 tracking-tighter">
-                                        {stat.value}
+                                        {isVisible ? (
+                                            <CountUp end={parseFloat(stat.value.toString().replace(/,/g, ''))} duration={1500} />
+                                        ) : (
+                                            "0"
+                                        )}
                                     </span>
                                     <span className="text-[10px] font-black text-white/50 uppercase tracking-[0.2em]">{stat.label}</span>
                                 </div>

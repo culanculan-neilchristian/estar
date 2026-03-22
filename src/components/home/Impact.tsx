@@ -1,7 +1,10 @@
 import React from 'react';
 import { Church, Megaphone, UserRound, Percent } from 'lucide-react';
+import CountUp from '../ui/CountUp';
+import { useScrollReveal } from '@/hooks/useScrollReveal';
 
 const ImpactContent = () => {
+    const { ref, isVisible } = useScrollReveal(0.1);
     const stats = [
         {
             icon: Church,
@@ -35,16 +38,34 @@ const ImpactContent = () => {
                 prayer.
             </p>
 
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 w-full max-w-2xl">
-                {stats.map((stat, idx) => (
-                    <div key={idx} className="flex flex-col items-center text-center">
-                        <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-4 shadow-lg shadow-white/5">
-                            <stat.icon className="w-7 h-7 text-black" />
+            <div ref={ref} className="grid grid-cols-2 lg:grid-cols-4 gap-8 w-full max-w-2xl">
+                {stats.map((stat, idx) => {
+                    const numberValue = parseFloat(stat.value.replace(/,/g, ''));
+                    const isPercentage = stat.value.includes('%');
+                    const decimals = isPercentage ? 1 : 0;
+                    const suffix = isPercentage ? '%' : '';
+
+                    return (
+                        <div key={idx} className="flex flex-col items-center text-center">
+                            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-4 shadow-lg shadow-white/5">
+                                <stat.icon className="w-7 h-7 text-black" />
+                            </div>
+                            <span className="text-2xl font-bold text-white mb-1 tracking-tight">
+                                {isVisible ? (
+                                    <CountUp 
+                                        end={numberValue} 
+                                        decimals={decimals} 
+                                        suffix={suffix} 
+                                        duration={1500}
+                                    />
+                                ) : (
+                                    <span>0{suffix}</span>
+                                )}
+                            </span>
+                            <span className="stat-label">{stat.label}</span>
                         </div>
-                        <span className="text-2xl font-bold text-white mb-1 tracking-tight">{stat.value}</span>
-                        <span className="stat-label">{stat.label}</span>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
         </div>
     );
