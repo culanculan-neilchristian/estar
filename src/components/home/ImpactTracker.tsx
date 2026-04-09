@@ -8,12 +8,19 @@ import { NAKHON_SAWAN_DUMMY_DATA } from '@/data/dummyProvinceData';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
 import NakhonSawanSvgMap from './NakhonSawanSvgMap';
 
-const ImpactTracker = () => {
+import { TimelineStateData } from '@/data/dummyProvinceData';
+
+interface ImpactTrackerProps {
+    data?: Record<number, TimelineStateData>;
+}
+
+const ImpactTracker = ({ data }: ImpactTrackerProps) => {
     const { ref, isVisible } = useScrollReveal();
     const [activeStep, setActiveStep] = useState(2); // Default to "Today"
     const [selectedDistrictName, setSelectedDistrictName] = useState<string | null>(null);
 
-    const currentState = NAKHON_SAWAN_DUMMY_DATA[activeStep];
+    const timelineData = data || NAKHON_SAWAN_DUMMY_DATA;
+    const currentState = timelineData[activeStep];
     
     // Find selected district data or provide fallback to province totals if none selected
     const selectedDistrict = currentState.districts.find(d => d.name === selectedDistrictName) || null;
@@ -46,7 +53,7 @@ const ImpactTracker = () => {
                         </div>
 
                         <div className="relative pl-8 border-l border-white/10 space-y-12">
-                            {Object.entries(NAKHON_SAWAN_DUMMY_DATA).map(([key, step], idx) => (
+                            {Object.entries(timelineData).map(([key, step], idx) => (
                                 <div 
                                     key={key} 
                                     className={`relative transition-all duration-500 cursor-pointer reveal-on-scroll fade-up ${isVisible ? 'is-visible' : ''} ${idx === activeStep ? 'opacity-100' : 'opacity-40 hover:opacity-60'}`}
@@ -87,6 +94,7 @@ const ImpactTracker = () => {
                                 activeStep={activeStep}
                                 activeDistrict={selectedDistrictName}
                                 onDistrictSelect={(name) => setSelectedDistrictName(name === selectedDistrictName ? null : name)}
+                                customDistrictsData={currentState.districts}
                             />
                         </div>
 

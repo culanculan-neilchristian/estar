@@ -27,6 +27,7 @@ export const PROVINCE_MAPPING: Record<string, string> = {
   "ชัยภูมิ": "Chaiyaphum",
   "อำนาจเจริญ": "Amnat Charoen",
   "หนองบัวลำภู": "Nong Bua Lam Phu",
+  "ขอนแก่น": "Khon Kaen",
   "อุดรธานี": "Udon Thani",
   "เลย": "Loei",
   "หนองคาย": "Nong Khai",

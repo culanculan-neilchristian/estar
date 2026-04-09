@@ -6,14 +6,13 @@ import Container from '@/components/layout/Container';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
 import NakhonSawanSvgMap from './NakhonSawanSvgMap';
 import CountUp from '../ui/CountUp';
+import { TimelineStateData } from '@/data/dummyProvinceData';
 
 interface DistrictResult {
     name: string;
     churches: number;
     members: string;
     believers: string;
-    top: string;
-    left: string;
 }
 
 interface ResultData {
@@ -28,11 +27,11 @@ const EXPECTED_DATA: ResultData = {
     title: "Expected 2024 Results",
     churches: 311,
     members: "3,200",
-    believers: "1,700",
+    believers: "0",
     districts: [
-        { name: "Lat Yao", churches: 121, members: "1,250", believers: "700", top: "45%", left: "12%" },
-        { name: "Tak Fa", churches: 102, members: "1,050", believers: "550", top: "58%", left: "42%" },
-        { name: "Khaisali", churches: 88, members: "900", believers: "450", top: "54%", left: "78%" }
+        { name: "Lat Yao", churches: 121, members: "1,250", believers: "0" },
+        { name: "Tak Fa", churches: 102, members: "1,050", believers: "0" },
+        { name: "Khaisali", churches: 88, members: "900", believers: "0" }
     ]
 };
 
@@ -40,11 +39,11 @@ const ACTUAL_DATA: ResultData = {
     title: "Actual 2024 Results",
     churches: 325,
     members: "3,782",
-    believers: "2,144",
+    believers: "0",
     districts: [
-        { name: "Lat Yao", churches: 126, members: "1,489", believers: "855", top: "45%", left: "12%" },
-        { name: "Tak Fa", churches: 107, members: "1,268", believers: "717", top: "58%", left: "42%" },
-        { name: "Khaisali", churches: 92, members: "1,025", believers: "572", top: "54%", left: "78%" }
+        { name: "Lat Yao", churches: 126, members: "1,489", believers: "0" },
+        { name: "Tak Fa", churches: 107, members: "1,268", believers: "0" },
+        { name: "Khaisali", churches: 92, members: "1,025", believers: "0" }
     ]
 };
 
@@ -108,8 +107,27 @@ const ResultCard = ({ data, isVisible }: { data: ResultData; isVisible: boolean 
     );
 };
 
-const ExpectationsReality = () => {
+interface ExpectationsRealityProps {
+    actualData2024?: TimelineStateData;
+}
+
+const ExpectationsReality = ({ actualData2024 }: ExpectationsRealityProps) => {
     const { ref, isVisible } = useScrollReveal();
+
+    // Map the dynamic TimelineStateData to the ResultData format
+    const dynamicActual: ResultData = actualData2024 ? {
+        title: "Actual 2024 Results",
+        churches: actualData2024.churches,
+        members: actualData2024.joined,
+        believers: actualData2024.baptized,
+        districts: actualData2024.districts.map(d => ({
+            name: d.name,
+            churches: d.churches,
+            members: d.joined,
+            believers: d.baptized
+        }))
+    } : ACTUAL_DATA;
+
     return (
         <section ref={ref} className="bg-black py-24 border-t border-white/5">
             <Container>
@@ -117,9 +135,8 @@ const ExpectationsReality = () => {
                     <h2 className="heading-1 mb-6 text-white text-3xl font-bold tracking-tight">Expectations & Reality</h2>
                     <p className="paragraph text-white/60 text-lg leading-relaxed">
                         What began as a bold vision to reach 311 house churches and 3 district churches across the province 
-                        of Nakhon Sawan has quickly grown beyond anything we projected. By year&apos;s end, God opened doors 
-                        wider than expected—allowing us to reach 325 house churches, welcoming 3,782 members, 
-                        and witnessing 2,144 baptisms.
+                        of Nakhon Sawan has quickly grown beyond anything we projected. By 2024 year end, God opened doors 
+                        wider than expected—allowing us to reach {dynamicActual.churches} house churches, welcoming {dynamicActual.members} members.
                     </p>
                 </div>
 
@@ -128,7 +145,7 @@ const ExpectationsReality = () => {
                         <ResultCard data={EXPECTED_DATA} isVisible={isVisible} />
                     </div>
                     <div className={`flex-1 reveal-on-scroll scale-in delay-400 ${isVisible ? 'is-visible' : ''}`}>
-                        <ResultCard data={ACTUAL_DATA} isVisible={isVisible} />
+                        <ResultCard data={dynamicActual} isVisible={isVisible} />
                     </div>
                 </div>
             </Container>

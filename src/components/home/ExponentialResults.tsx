@@ -6,21 +6,23 @@ import Container from '@/components/layout/Container';
 import CountUp from '../ui/CountUp';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
 import NakhonSawanSvgMap from './NakhonSawanSvgMap';
+import { TimelineStateData } from '@/data/dummyProvinceData';
 
-const ExponentialResults = () => {
+interface ExponentialResultsProps {
+    data?: TimelineStateData;
+}
+
+const ExponentialResults = ({ data }: ExponentialResultsProps) => {
     const { ref, isVisible } = useScrollReveal();
     const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
 
-    const districts = [
-        { id: "latyao", name: "Lat Yao", churches: 142, joined: "1,882", baptized: "1,357", coordinates: [0, 0] as [number, number] },
-        { id: "takfa", name: "Tak Fa", churches: 119, joined: "1,633", baptized: "1,074", coordinates: [0, 0] as [number, number] },
-        { id: "khaisali", name: "Khaisali", churches: 100, joined: "1,408", baptized: "860", coordinates: [0, 0] as [number, number] }
-    ];
+    const timelineData = data;
+    const districts = timelineData?.districts || [];
 
     const totals = [
-        { icon: Church, value: "361", label: "CHURCHES" },
-        { icon: Megaphone, value: "4,923", label: "MEMBERS" },
-        { icon: UserRound, value: "3,291", label: "BELIEVERS" }
+        { icon: Church, value: timelineData?.churches.toString() || "0", label: "CHURCHES" },
+        { icon: Megaphone, value: timelineData?.joined || "0", label: "MEMBERS" },
+        { icon: UserRound, value: timelineData?.baptized || "0", label: "BELIEVERS" }
     ];
 
     return (

@@ -9,6 +9,7 @@ import { PROVINCE_MAPPING } from '@/data/provinceMapping';
 
 export default async function Home() {
   const churches = await CsvDataService.getAllChurches();
+  const nakhonSawanStats = await CsvDataService.getImpactTrackerStats("นครสวรรค์");
   
   // Calculate Global Stats
   const totalChurches = churches.length;
@@ -59,16 +60,16 @@ export default async function Home() {
   const provinceStats: DistrictStats[] = Object.values(provinceStatsMap).map(p => ({
     ...p,
     joined: p.joined.toLocaleString(), // Formatting for display
-    baptized: "0" // Placeholder for now
+    baptized: "0"
   }));
 
   return (
     <main className="flex flex-col w-full">
       <Hero stats={stats} provinceStats={provinceStats} />
-      <ImpactTracker />
-      <ExpectationsReality />
+      <ImpactTracker data={nakhonSawanStats} />
+      <ExpectationsReality actualData2024={nakhonSawanStats[1]} />
       <TransformedLives />
-      <ExponentialResults />
+      <ExponentialResults data={nakhonSawanStats[4]} />
     </main>
   );
 }
