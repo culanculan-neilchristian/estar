@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
     }
 
     if (district) {
-      data = data.filter((item) => item.district === district);
+      data = data.filter((item) => item.amphoe === district);
     }
 
     // Limit output to prevent huge payloads over the network
