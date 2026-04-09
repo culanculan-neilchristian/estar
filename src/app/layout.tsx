@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Gothic_A1 } from "next/font/google";
-import "@/styles/globals.scss";
+import "@/styles/globals.css";
+import ReactQueryProvider from "@/components/ReactQueryProvider";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 
 const gothicA1 = Gothic_A1({
   variable: "--font-gothic-a1",
@@ -12,10 +15,6 @@ export const metadata: Metadata = {
   title: "eStar Global - Impacting Thailand",
   description: "A church in every village. A disciple in every home.",
 };
-
-import ReactQueryProvider from "@/components/ReactQueryProvider";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
 
 export default function RootLayout({
   children,

@@ -47,7 +47,7 @@ const ThailandSvgMap: React.FC<ThailandSvgMapProps> = ({
             onMouseMove={handleMouseMove}
         >
             <svg 
-                viewBox="0 0 382 700"
+                viewBox="0 0 560 1025"
                 className="w-full h-full max-h-[800px]"
                 xmlns="http://www.w3.org/2000/svg"
             >
