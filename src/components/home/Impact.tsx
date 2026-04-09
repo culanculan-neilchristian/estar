@@ -1,30 +1,39 @@
 import React from 'react';
-import { Church, Megaphone, UserRound, Percent } from 'lucide-react';
+import { Church, Megaphone, MapPin, Percent } from 'lucide-react';
 import CountUp from '../ui/CountUp';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
 
-const ImpactContent = () => {
+interface ImpactProps {
+    stats: {
+        totalChurches: number;
+        totalProvinces: number;
+        totalMembers: number;
+        impactPercentage: number;
+    };
+}
+
+const ImpactContent = ({ stats }: ImpactProps) => {
     const { ref, isVisible } = useScrollReveal(0.1);
-    const stats = [
+    const displayStats = [
         {
             icon: Church,
-            value: "361",
+            value: stats.totalChurches.toString(),
             label: "CHURCHES PLANTED"
         },
         {
             icon: Megaphone,
-            value: "4,923",
-            label: "JOINED MEMBERS"
+            value: stats.totalMembers.toLocaleString(),
+            label: "ESTIMATED MEMBERS"
         },
         {
-            icon: UserRound,
-            value: "3,291",
-            label: "BAPTIZED MEMBERS"
+            icon: MapPin,
+            value: stats.totalProvinces.toString(),
+            label: "PROVINCES REACHED"
         },
         {
             icon: Percent,
-            value: "3.7%",
-            label: "THAILAND IMPACTED"
+            value: `${stats.impactPercentage.toFixed(1)}%`,
+            label: "VILLAGES REACHED"
         }
     ];
 
@@ -39,7 +48,7 @@ const ImpactContent = () => {
             </p>
 
             <div ref={ref} className="grid grid-cols-2 lg:grid-cols-4 gap-8 w-full max-w-2xl">
-                {stats.map((stat, idx) => {
+                {displayStats.map((stat, idx) => {
                     const numberValue = parseFloat(stat.value.replace(/,/g, ''));
                     const isPercentage = stat.value.includes('%');
                     const decimals = isPercentage ? 1 : 0;

@@ -6,7 +6,19 @@ import ImpactContent from './Impact';
 import ThailandSvgMap from './ThailandSvgMap';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
 
-const Hero = () => {
+import { DistrictStats } from '@/data/dummyProvinceData';
+
+interface HeroProps {
+    stats: {
+        totalChurches: number;
+        totalProvinces: number;
+        totalMembers: number;
+        impactPercentage: number;
+    };
+    provinceStats?: DistrictStats[];
+}
+
+const Hero = ({ stats, provinceStats }: HeroProps) => {
     const { ref, isVisible } = useScrollReveal(0.05);
     const [selectedProvince, setSelectedProvince] = useState<string | null>(null);
 
@@ -21,6 +33,7 @@ const Hero = () => {
                             activeStep={2}
                             activeProvince={selectedProvince}
                             onProvinceSelect={(name: string) => setSelectedProvince(name)}
+                            customProvincesData={provinceStats}
                         />
                     </div>
                     
@@ -35,7 +48,7 @@ const Hero = () => {
                         </h1>
                         <div className="flex flex-col gap-5">
                             <p className={`paragraph reveal-on-scroll fade-up delay-200 ${isVisible ? 'is-visible' : ''}`}>
-                                Thailand is home to over 84,000 villages, but 94.7% of them had no Gospel presence. Because of your
+                                Thailand is home to over 84,000 villages, but {(100 - stats.impactPercentage).toFixed(1)}% of them had no Gospel presence. Because of your
                                 giving, that is changing — faster than we expected. Entire districts are being reached, new believers are 
                                 being baptized, and the movement is accelerating.
                             </p>
@@ -50,7 +63,7 @@ const Hero = () => {
                     </div>
 
                     <div className={`w-full pt-8 border-t border-white/5 reveal-on-scroll fade-up delay-500 ${isVisible ? 'is-visible' : ''}`}>
-                        <ImpactContent />
+                        <ImpactContent stats={stats} />
                     </div>
                 </div>
             </Container>
