@@ -6,10 +6,15 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "payload": "payload",
+    "generate:types": "payload generate:types"
   },
   "dependencies": {
     "@google-cloud/bigquery": "^8.1.1",
+    "@payloadcms/db-postgres": "^3.82.1",
+    "@payloadcms/next": "^3.82.1",
+    "@payloadcms/richtext-lexical": "^3.82.1",
     "@tanstack/react-query": "^5.90.21",
     "@types/mapbox-gl": "^3.4.1",
     "axios": "^1.13.6",
@@ -17,10 +22,12 @@
     "mapbox-gl": "^3.20.0",
     "next": "^16.2.3",
     "papaparse": "^5.5.3",
+    "payload": "^3.82.1",
     "puppeteer": "^24.39.1",
     "radix-ui": "^1.4.3",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "sharp": "^0.34.5",
     "zod": "^4.3.6"
   },
   "devDependencies": {
