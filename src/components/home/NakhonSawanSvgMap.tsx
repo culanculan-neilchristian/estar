@@ -102,11 +102,11 @@ const NakhonSawanSvgMap: React.FC<NakhonSawanSvgMapProps> = ({
                             </div>
                             <div className="flex items-center gap-3">
                                 <Megaphone size={18} className="text-black/30" />
-                                <span className="text-xl font-black text-black leading-none">{districtStats?.joined || 0}</span>
+                                <span className="text-xl font-black text-black leading-none">{districtStats?.villages || 0}</span>
                             </div>
                             <div className="flex items-center gap-3">
                                 <UserRound size={18} className="text-black/30" />
-                                <span className="text-xl font-black text-black leading-none">{districtStats?.baptized || 0}</span>
+                                <span className="text-xl font-black text-black leading-none">{districtStats?.joined || 0}</span>
                             </div>
                         </div>
                     </div>

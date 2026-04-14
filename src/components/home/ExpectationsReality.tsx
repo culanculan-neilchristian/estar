@@ -11,39 +11,39 @@ import { TimelineStateData } from '@/data/dummyProvinceData';
 interface DistrictResult {
     name: string;
     churches: number;
+    villages: number;
     members: string;
-    believers: string;
 }
 
 interface ResultData {
     title: string;
     churches: number;
+    villages: number;
     members: string;
-    believers: string;
     districts: DistrictResult[];
 }
 
 const EXPECTED_DATA: ResultData = {
     title: "Expected 2024 Results",
     churches: 311,
+    villages: 311,
     members: "3,200",
-    believers: "0",
     districts: [
-        { name: "Lat Yao", churches: 121, members: "1,250", believers: "0" },
-        { name: "Tak Fa", churches: 102, members: "1,050", believers: "0" },
-        { name: "Khaisali", churches: 88, members: "900", believers: "0" }
+        { name: "Lat Yao", churches: 121, villages: 121, members: "1,250" },
+        { name: "Tak Fa", churches: 102, villages: 102, members: "1,050" },
+        { name: "Khaisali", churches: 88, villages: 88, members: "900" }
     ]
 };
 
 const ACTUAL_DATA: ResultData = {
     title: "Actual 2024 Results",
     churches: 325,
+    villages: 314, // Roughly based on church count
     members: "3,782",
-    believers: "0",
     districts: [
-        { name: "Lat Yao", churches: 126, members: "1,489", believers: "0" },
-        { name: "Tak Fa", churches: 107, members: "1,268", believers: "0" },
-        { name: "Khaisali", churches: 92, members: "1,025", believers: "0" }
+        { name: "Lat Yao", churches: 126, villages: 121, members: "1,489" },
+        { name: "Tak Fa", churches: 107, villages: 104, members: "1,268" },
+        { name: "Khaisali", churches: 92, villages: 89, members: "1,025" }
     ]
 };
 
@@ -55,8 +55,9 @@ const ResultCard = ({ data, isVisible }: { data: ResultData; isVisible: boolean 
         id: d.name.toLowerCase().replace(/\s+/g, '-'),
         name: d.name,
         churches: d.churches,
+        villages: d.villages,
         joined: d.members,
-        baptized: d.believers,
+        baptized: "0",
         coordinates: [0, 0] as [number, number]
     }));
 
@@ -89,18 +90,18 @@ const ResultCard = ({ data, isVisible }: { data: ResultData; isVisible: boolean 
                     <Megaphone className="w-6 h-6 text-white" />
                 </div>
                 <span className="text-2xl font-black text-white">
-                    {isVisible ? <CountUp end={parseFloat(data.members.replace(/,/g, ''))} duration={1500} /> : '0'}
+                    {isVisible ? <CountUp end={data.villages} duration={1500} /> : '0'}
                 </span>
-                <span className="text-[9px] font-black text-white/30 uppercase tracking-widest mt-1">MEMBERS</span>
+                <span className="text-[9px] font-black text-white/30 uppercase tracking-widest mt-1">VILLAGES</span>
             </div>
             <div className="flex flex-col items-center">
                 <div className="w-14 h-14 bg-white/10 border border-white/10 rounded-full flex items-center justify-center mb-3">
                     <UserRound className="w-6 h-6 text-white" />
                 </div>
                 <span className="text-2xl font-black text-white">
-                    {isVisible ? <CountUp end={parseFloat(data.believers.replace(/,/g, ''))} duration={1500} /> : '0'}
+                    {isVisible ? <CountUp end={parseFloat(data.members.replace(/,/g, ''))} duration={1500} /> : '0'}
                 </span>
-                <span className="text-[9px] font-black text-white/30 uppercase tracking-widest mt-1">BELIEVERS</span>
+                <span className="text-[9px] font-black text-white/30 uppercase tracking-widest mt-1">MEMBERS</span>
             </div>
             </div>
         </div>
@@ -118,13 +119,13 @@ const ExpectationsReality = ({ actualData2024 }: ExpectationsRealityProps) => {
     const dynamicActual: ResultData = actualData2024 ? {
         title: "Actual 2024 Results",
         churches: actualData2024.churches,
+        villages: actualData2024.villages,
         members: actualData2024.joined,
-        believers: actualData2024.baptized,
         districts: actualData2024.districts.map(d => ({
             name: d.name,
             churches: d.churches,
-            members: d.joined,
-            believers: d.baptized
+            villages: d.villages,
+            members: d.joined
         }))
     } : ACTUAL_DATA;
 

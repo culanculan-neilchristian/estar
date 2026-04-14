@@ -111,11 +111,11 @@ const ThailandSvgMap: React.FC<ThailandSvgMapProps> = ({
                             </div>
                             <div className="flex items-center gap-3">
                                 <Megaphone size={18} className="text-black/20" />
-                                <span className="text-xl font-black text-black leading-none">{provinceStats?.joined || 0}</span>
+                                <span className="text-xl font-black text-black leading-none">{provinceStats?.villages || 0}</span>
                             </div>
                             <div className="flex items-center gap-3">
                                 <UserRound size={18} className="text-black/20" />
-                                <span className="text-xl font-black text-black leading-none">{provinceStats?.baptized || 0}</span>
+                                <span className="text-xl font-black text-black leading-none">{provinceStats?.joined || 0}</span>
                             </div>
                         </div>
                     </div>

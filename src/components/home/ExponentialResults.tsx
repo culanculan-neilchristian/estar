@@ -21,8 +21,8 @@ const ExponentialResults = ({ data }: ExponentialResultsProps) => {
 
     const totals = [
         { icon: Church, value: timelineData?.churches.toString() || "0", label: "CHURCHES" },
-        { icon: Megaphone, value: timelineData?.joined || "0", label: "MEMBERS" },
-        { icon: UserRound, value: timelineData?.baptized || "0", label: "BELIEVERS" }
+        { icon: Megaphone, value: timelineData?.villages.toString() || "0", label: "VILLAGES" },
+        { icon: UserRound, value: timelineData?.joined || "0", label: "MEMBERS" }
     ];
 
     return (
