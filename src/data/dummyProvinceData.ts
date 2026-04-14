@@ -1,6 +1,7 @@
 export interface DistrictStats {
   name: string;
   churches: number;
+  villages: number;
   joined: string;
   baptized: string;
   coordinates: [number, number]; // [lng, lat]
@@ -11,6 +12,7 @@ export interface TimelineStateData {
   label: string;
   date: string;
   churches: number;
+  villages: number;
   joined: string;
   baptized: string;
   description: string;

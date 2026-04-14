@@ -12,6 +12,7 @@ interface HeroProps {
     stats: {
         totalChurches: number;
         totalProvinces: number;
+        totalVillages: number;
         totalMembers: number;
         impactPercentage: number;
     };

@@ -157,10 +157,15 @@ export class CsvDataService {
         });
         
         const joinedCount = distRecords.reduce((sum, c) => sum + (c.participate || 0), 0);
+        const uniqueVillages = new Set(distRecords.map(c => 
+          `${c.province?.trim()}|${c.amphoe?.trim()}|${c.tambon?.trim()}|${c.village?.trim() || 'unnamed'}`
+        )).size;
+
         return {
           id: engName.toLowerCase().replace(/\s+/g, '-'),
           name: engName,
           churches: distRecords.length,
+          villages: uniqueVillages,
           joined: joinedCount.toLocaleString(),
           baptized: "0",
           coordinates: [0, 0] as [number, number]
@@ -168,11 +173,15 @@ export class CsvDataService {
       });
 
       const totalJoined = records.reduce((sum, c) => sum + (c.participate || 0), 0);
+      const totalVillages = new Set(records.map(c => 
+        `${c.province?.trim()}|${c.amphoe?.trim()}|${c.tambon?.trim()}|${c.village?.trim() || 'unnamed'}`
+      )).size;
 
       return {
         label,
         date,
         churches: records.length,
+        villages: totalVillages,
         joined: totalJoined.toLocaleString(),
         baptized: Math.floor(totalJoined * 0.67).toLocaleString(),
         description,
@@ -200,6 +209,7 @@ export class CsvDataService {
       label: 'Next Year Expectations',
       date: '2026 DECEMBER',
       churches: Math.floor(today.churches * 1.2),
+      villages: Math.floor(today.villages * 1.2),
       joined: Math.floor(parseInt(today.joined.replace(/,/g, ''), 10) * 1.2).toLocaleString(),
       baptized: "0",
       description: "Projected goal for gospel saturation.",
@@ -207,6 +217,7 @@ export class CsvDataService {
       districts: today.districts.map((d: DistrictStats) => ({
         ...d,
         churches: Math.floor(d.churches * 1.2),
+        villages: Math.floor(d.villages * 1.2),
         joined: Math.floor(parseInt(d.joined.replace(/,/g, ''), 10) * 1.2).toLocaleString(),
         baptized: "0",
       }))
