@@ -25,6 +25,7 @@ export const NAKHON_SAWAN_DUMMY_DATA: Record<number, TimelineStateData> = {
     label: 'The Start',
     date: '2024 JANUARY',
     churches: 0,
+    villages: 0,
     joined: "0",
     baptized: "0",
     description: "Aimed to reach 311 house churches and 3 district churches in 3 districts in the province of Nakhon Sawan. Throughout 2024, we have reached a total of 325 house churches. To date, we have reached a total of 361 village churches, including 3 district churches.",
@@ -33,15 +34,16 @@ export const NAKHON_SAWAN_DUMMY_DATA: Record<number, TimelineStateData> = {
       "Projected 311 village house churches"
     ],
     districts: [
-      { id: "lat-yao", name: "Lat Yao", churches: 0, joined: "0", baptized: "0", coordinates: [99.7891, 15.7516] },
-      { id: "tak-fa", name: "Tak Fa", churches: 0, joined: "0", baptized: "0", coordinates: [100.4851, 15.3400] },
-      { id: "khaisali", name: "Khaisali", churches: 0, joined: "0", baptized: "0", coordinates: [100.6500, 15.5800] }
+      { id: "lat-yao", name: "Lat Yao", churches: 0, villages: 0, joined: "0", baptized: "0", coordinates: [99.7891, 15.7516] },
+      { id: "tak-fa", name: "Tak Fa", churches: 0, villages: 0, joined: "0", baptized: "0", coordinates: [100.4851, 15.3400] },
+      { id: "khaisali", name: "Khaisali", churches: 0, villages: 0, joined: "0", baptized: "0", coordinates: [100.6500, 15.5800] }
     ]
   },
   1: { // One Year In
     label: 'One Year In',
     date: '2024 DECEMBER',
     churches: 325,
+    villages: 314,
     joined: "3,782",
     baptized: "2,144",
     description: "By December 2024, we witnessed explosive growth. With over 325 house churches planted, we reached over 2,000 new believers. The leadership training movements matured significantly, exceeding our 2026 goals two years earlier than projected.",
@@ -51,15 +53,16 @@ export const NAKHON_SAWAN_DUMMY_DATA: Record<number, TimelineStateData> = {
       "Exceeded expectations by completing 2026 goals two years early"
     ],
     districts: [
-      { id: "lat-yao", name: "Lat Yao", churches: 126, joined: "1,489", baptized: "855", coordinates: [99.7891, 15.7516] },
-      { id: "tak-fa", name: "Tak Fa", churches: 107, joined: "1,268", baptized: "717", coordinates: [100.4851, 15.3400] },
-      { id: "khaisali", name: "Khaisali", churches: 92, joined: "1,025", baptized: "572", coordinates: [100.6500, 15.5800] }
+      { id: "lat-yao", name: "Lat Yao", churches: 126, villages: 121, joined: "1,489", baptized: "855", coordinates: [99.7891, 15.7516] },
+      { id: "tak-fa", name: "Tak Fa", churches: 107, villages: 104, joined: "1,268", baptized: "717", coordinates: [100.4851, 15.3400] },
+      { id: "khaisali", name: "Khaisali", churches: 92, villages: 89, joined: "1,025", baptized: "572", coordinates: [100.6500, 15.5800] }
     ]
   },
   2: { // Today
     label: 'Today',
     date: '2025 JULY',
     churches: 361,
+    villages: 350,
     joined: "4,923",
     baptized: "3,291",
     description: "As of July 2025, we continue to see sustainable acceleration. All 3 target districts are now fully integrated into the planting movement. We are transitioning to a self-multiplying phase, with 361 village house churches currently active.",
@@ -69,15 +72,16 @@ export const NAKHON_SAWAN_DUMMY_DATA: Record<number, TimelineStateData> = {
       "Reached over 3,000 new believers"
     ],
     districts: [
-      { id: "lat-yao", name: "Lat Yao", churches: 142, joined: "1,882", baptized: "1,357", coordinates: [99.7891, 15.7516] },
-      { id: "tak-fa", name: "Tak Fa", churches: 119, joined: "1,633", baptized: "1,074", coordinates: [100.4851, 15.3400] },
-      { id: "khaisali", name: "Khaisali", churches: 100, joined: "1,408", baptized: "860", coordinates: [100.6500, 15.5800] }
+      { id: "lat-yao", name: "Lat Yao", churches: 142, villages: 135, joined: "1,882", baptized: "1,357", coordinates: [99.7891, 15.7516] },
+      { id: "tak-fa", name: "Tak Fa", churches: 119, villages: 115, joined: "1,633", baptized: "1,074", coordinates: [100.4851, 15.3400] },
+      { id: "khaisali", name: "Khaisali", churches: 100, villages: 100, joined: "1,408", baptized: "860", coordinates: [100.6500, 15.5800] }
     ]
   },
   3: { // Next Year Expectations
     label: 'Next Year Expectations',
     date: '2026 DECEMBER',
     churches: 385,
+    villages: 385,
     joined: "7,000",
     baptized: "4,500",
     description: "By the end of 2026, we expect to achieve complete gospel saturation across the province. Projected growth suggests over 385 churches and reaching more than 7,000 new disciples through exponential multiplication.",
@@ -87,9 +91,9 @@ export const NAKHON_SAWAN_DUMMY_DATA: Record<number, TimelineStateData> = {
       "Continued exponential growth beyond initial donation"
     ],
     districts: [
-      { id: "lat-yao", name: "Lat Yao", churches: 155, joined: "2,600", baptized: "1,800", coordinates: [99.7891, 15.7516] },
-      { id: "tak-fa", name: "Tak Fa", churches: 125, joined: "2,400", baptized: "1,450", coordinates: [100.4851, 15.3400] },
-      { id: "khaisali", name: "Khaisali", churches: 105, joined: "2,000", baptized: "1,250", coordinates: [100.6500, 15.5800] }
+      { id: "lat-yao", name: "Lat Yao", churches: 155, villages: 155, joined: "2,600", baptized: "1,800", coordinates: [99.7891, 15.7516] },
+      { id: "tak-fa", name: "Tak Fa", churches: 125, villages: 125, joined: "2,400", baptized: "1,450", coordinates: [100.4851, 15.3400] },
+      { id: "khaisali", name: "Khaisali", churches: 105, villages: 105, joined: "2,000", baptized: "1,250", coordinates: [100.6500, 15.5800] }
     ]
   }
 };
