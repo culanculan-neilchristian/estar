@@ -66,13 +66,13 @@ export default async function Home() {
 
     if (church.status?.trim() === 'เปิดอยู่') {
       acc[provinceName].churches += 1;
+      acc[provinceName].joined += (church.participate || 0);
     }
 
     // Villages reached are cumulative (including surveyed/closed)
     const villageKey = `${church.province?.trim()}|${church.amphoe?.trim()}|${church.tambon?.trim()}|${church.village?.trim() || 'unnamed'}`;
     acc[provinceName].villages.add(villageKey);
     
-    acc[provinceName].joined += (church.participate || 0);
     return acc;
   }, {} as Record<string, ProvinceAccumulator>);
 

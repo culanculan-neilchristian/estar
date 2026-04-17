@@ -143,28 +143,33 @@ export class CsvDataService {
     };
 
     const calculatePhaseStats = (maxYear: number | null, label: string, date: string, description: string, bulletPoints: string[]) => {
-      // Filter records: open status, within year (if year provided), and ignore invalid/empty IDs
-      const records = provinceChurches.filter(c => {
+      // Phase records include all entries within the year range (cumulative footprint)
+      const phaseRecords = provinceChurches.filter(c => {
         const year = parseInt(c.yearBegan || '0', 10);
         const yearMatch = maxYear === null || (year > 0 && year <= maxYear);
-        return c.id && yearMatch && c.status === 'เปิดอยู่';
+        return !!c.id && yearMatch;
       });
 
+      // Open records are used for active church and member counts
+      const openRecords = phaseRecords.filter(c => c.status?.trim() === 'เปิดอยู่');
+
       const districtStats = Object.entries(DISTRICT_MAP).map(([thaiName, engName]) => {
-        const distRecords = records.filter(c => {
+        const distPhaseRecords = phaseRecords.filter(c => {
           const normalizedCsv = c.amphoe.replace(/\s+/g, '').replace('อำเภอ', '');
           return normalizedCsv === thaiName;
         });
         
-        const joinedCount = distRecords.reduce((sum, c) => sum + (c.participate || 0), 0);
-        const uniqueVillages = new Set(distRecords.map(c => 
+        const distOpenRecords = distPhaseRecords.filter(c => c.status?.trim() === 'เปิดอยู่');
+        
+        const joinedCount = distOpenRecords.reduce((sum, c) => sum + (c.participate || 0), 0);
+        const uniqueVillages = new Set(distPhaseRecords.map(c => 
           `${c.province?.trim()}|${c.amphoe?.trim()}|${c.tambon?.trim()}|${c.village?.trim() || 'unnamed'}`
         )).size;
 
         return {
           id: engName.toLowerCase().replace(/\s+/g, '-'),
           name: engName,
-          churches: distRecords.length,
+          churches: distOpenRecords.length,
           villages: uniqueVillages,
           joined: joinedCount.toLocaleString(),
           baptized: "0",
@@ -172,15 +177,15 @@ export class CsvDataService {
         };
       });
 
-      const totalJoined = records.reduce((sum, c) => sum + (c.participate || 0), 0);
-      const totalVillages = new Set(records.map(c => 
+      const totalJoined = openRecords.reduce((sum, c) => sum + (c.participate || 0), 0);
+      const totalVillages = new Set(phaseRecords.map(c => 
         `${c.province?.trim()}|${c.amphoe?.trim()}|${c.tambon?.trim()}|${c.village?.trim() || 'unnamed'}`
       )).size;
 
       return {
         label,
         date,
-        churches: records.length,
+        churches: openRecords.length,
         villages: totalVillages,
         joined: totalJoined.toLocaleString(),
         baptized: Math.floor(totalJoined * 0.67).toLocaleString(),
