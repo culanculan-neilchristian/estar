@@ -11,7 +11,7 @@ export const ChurchDataSchema = z.object({
   churchName: z.string(),
   yearBegan: z.string().optional(),
   type: z.string().optional(),
-  village: z.string().optional(),
+  village: z.number().default(0), // Changed from string to number
   province: z.string(),
   amphoe: z.string(),   // This is the District (Amphoe)
   tambon: z.string(),   // This is the Sub-district (Tambon)
@@ -86,7 +86,7 @@ export class CsvDataService {
               churchName: row.churchName,
               yearBegan: row.yearBegan,
               type: row.type,
-              village: row.village,
+              village: parseInt(row.village || '0', 10), // Parse as integer
               province: row.province,
               amphoe: row.amphoe,
               tambon: row.tambon,
@@ -160,17 +160,14 @@ export class CsvDataService {
         });
         
         const distOpenRecords = distPhaseRecords.filter(c => c.status?.trim() === 'เปิดอยู่');
-        
         const joinedCount = distOpenRecords.reduce((sum, c) => sum + (c.participate || 0), 0);
-        const uniqueVillages = new Set(distPhaseRecords.map(c => 
-          `${c.province?.trim()}|${c.amphoe?.trim()}|${c.tambon?.trim()}|${c.village?.trim() || 'unnamed'}`
-        )).size;
+        const totalVillagesInDistrict = distPhaseRecords.reduce((sum, c) => sum + (c.village || 0), 0);
 
         return {
           id: engName.toLowerCase().replace(/\s+/g, '-'),
           name: engName,
           churches: distOpenRecords.length,
-          villages: uniqueVillages,
+          villages: totalVillagesInDistrict,
           joined: joinedCount.toLocaleString(),
           baptized: "0",
           coordinates: [0, 0] as [number, number]
@@ -178,9 +175,7 @@ export class CsvDataService {
       });
 
       const totalJoined = openRecords.reduce((sum, c) => sum + (c.participate || 0), 0);
-      const totalVillages = new Set(phaseRecords.map(c => 
-        `${c.province?.trim()}|${c.amphoe?.trim()}|${c.tambon?.trim()}|${c.village?.trim() || 'unnamed'}`
-      )).size;
+      const totalVillages = phaseRecords.reduce((sum, c) => sum + (c.village || 0), 0);
 
       return {
         label,
