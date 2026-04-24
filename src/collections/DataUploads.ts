@@ -1,8 +1,7 @@
 import type { CollectionConfig } from 'payload';
 import { revalidatePath } from 'next/cache';
-import path from 'path';
-import fs from 'fs';
-import { CsvDataService } from '../services/csv-data-service';
+import Papa from 'papaparse';
+// import { clearChurchCache } from '../utils/cache'; // No longer needed with revalidateTag
 
 export const DataUploads: CollectionConfig = {
   slug: 'data-uploads',
@@ -15,60 +14,126 @@ export const DataUploads: CollectionConfig = {
     description: 'Upload the latest estar-data.csv file here to update the dashboard instantly.',
   },
   upload: {
-    staticDir: '../public/media',
+    staticDir: 'uploads/data',
+    disableLocalStorage: true,
     mimeTypes: ['text/csv', 'application/vnd.ms-excel', 'text/plain'],
     imageSizes: [],
-    adminThumbnail: false,
-    limits: {
-      fileSize: 50 * 1024 * 1024, // 50MB
-    },
+    adminThumbnail: undefined,
   },
-  fields: [],
+  fields: [
+    {
+      name: 'results',
+      type: 'json',
+      admin: {
+        hidden: true, // Don't show the massive JSON in the admin UI
+      },
+    }
+  ],
   hooks: {
-    afterChange: [
-      async ({ doc, req, operation }) => {
-        if (operation === 'create' || operation === 'update') {
-          // Use an async IIFE to not block the return of the document
-          // This prevents the "There was a problem while uploading the file" error in the UI
-          // even if the post-processing (copying/revalidating) fails.
-          (async () => {
-            try {
-              console.log(`[CSV-HOOK] Processing ${operation} for ${doc.filename}`);
-              
-              const root = process.cwd();
-              // In Payload, if staticDir is '../public/media' and file is in src/collections
-              // the actual folder is project_root/public/media
-              const uploadedFilePath = path.resolve(root, 'public/media', doc.filename);
-              const targetPath = path.resolve(root, 'src/data/estar-data.csv');
-              
-              // Wait a tiny bit to ensure the file is flushed to disk by Payload
-              await new Promise(resolve => setTimeout(resolve, 500));
-
-              if (fs.existsSync(uploadedFilePath)) {
-                console.log(`[CSV-HOOK] Overwriting ${targetPath}`);
-                fs.copyFileSync(uploadedFilePath, targetPath);
+    beforeChange: [
+      async ({ operation, data, req }) => {
+        if ((operation === 'create' || operation === 'update') && req.file && req.file.data) {
+          console.log(`[CSV-PROCESS] Parsing ${req.file.name} into JSON...`);
+          
+          try {
+            const csvString = req.file.data.toString('utf8');
+            let districtCount = 0;
+            
+            // Parse synchronously from buffer
+            const results = Papa.parse(csvString, {
+              header: true,
+              skipEmptyLines: true,
+              transformHeader: (header) => {
+                const h = header.trim();
+                if (h === 'Response ID') return 'id';
+                if (h === 'Submitted Time') return 'submittedTime';
+                if (h === 'Church name') return 'churchName';
+                if (h === 'The year the church began') return 'yearBegan';
+                if (h === 'Church type') return 'type';
+                if (h === 'Village') return 'village';
+                if (h === 'province') return 'province';
+                if (h === 'Coordinates of the church') return 'coordinates';
+                if (h === 'Status of the Church') return 'status';
+                if (h === 'Church pictures') return 'imageMain';
+                if (h === 'Participate') return 'participate';
                 
-                CsvDataService.clearCache();
-                
-                // Try revalidate, but catch errors as it might fail in some server environments
-                try {
-                  revalidatePath('/');
-                  revalidatePath('/churches');
-                  console.log('[CSV-HOOK] Cache revalidated');
-                } catch (revalidateError) {
-                  console.warn('[CSV-HOOK] Revalidation failed (expected in some environments):', revalidateError);
+                if (h === 'district') {
+                  districtCount++;
+                  return districtCount === 1 ? 'amphoe' : 'tambon';
                 }
-                
-                console.log('✅ [CSV-HOOK] Update complete.');
-              } else {
-                console.warn('[CSV-HOOK] Source file not found:', uploadedFilePath);
+                return h;
               }
-            } catch (error) {
-              console.error('❌ [CSV-HOOK] Post-upload error:', error);
+            });
+
+            interface RawCsvRow {
+              id?: string;
+              submittedTime?: string;
+              churchName?: string;
+              yearBegan?: string;
+              type?: string;
+              village?: string;
+              province?: string;
+              amphoe?: string;
+              tambon?: string;
+              participate?: string;
+              coordinates?: string;
+              status?: string;
+              imageMain?: string;
             }
-          })();
+
+            const churches = (results.data as RawCsvRow[]).filter((row): row is RawCsvRow & { id: string; churchName: string } => 
+              !!row.id && !!row.churchName
+            ).map((row) => ({
+              id: row.id,
+              submittedTime: row.submittedTime,
+              churchName: row.churchName,
+              yearBegan: row.yearBegan,
+              type: row.type,
+              village: parseInt(row.village || '0', 10),
+              province: row.province,
+              amphoe: row.amphoe,
+              tambon: row.tambon,
+              participate: parseInt(row.participate || '0', 10),
+              coordinates: row.coordinates,
+              status: row.status,
+              imageMain: row.imageMain,
+            }));
+
+            data.results = churches;
+            console.log(`[CSV-PROCESS] Successfully parsed ${churches.length} churches.`);
+          } catch (err) {
+            console.error('[CSV-PROCESS] Error parsing CSV:', err);
+          }
+
+          // Cleanup old records
+          try {
+            const existing = await req.payload.find({
+              collection: 'data-uploads',
+              limit: 5,
+            });
+            if (existing.totalDocs > 0) {
+              await Promise.all(existing.docs.map(doc => 
+                req.payload.delete({ collection: 'data-uploads', id: doc.id })
+              ));
+            }
+          } catch (e) {
+            console.error('[CSV-PROCESS] Error cleaning up old records:', e);
+          }
         }
-        return doc;
+      }
+    ],
+    afterChange: [
+      async ({ operation }) => {
+        if (operation === 'create' || operation === 'update') {
+          // Trigger Next.js to revalidate the frontend pages
+          try {
+            revalidatePath('/', 'layout');
+            revalidatePath('/churches', 'page');
+            console.log('[CSV-UPLOAD] Cache cleared and revalidated');
+          } catch (e) {
+            console.warn('[CSV-UPLOAD] Revalidation failed:', e);
+          }
+        }
       }
     ]
   }
