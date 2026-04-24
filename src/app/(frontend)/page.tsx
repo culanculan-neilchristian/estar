@@ -17,10 +17,7 @@ export default async function Home() {
   // Cumulative Footprint (All provinces/villages ever reached)
   const totalProvincesCount = [...new Set(churches.map(c => c.province?.trim()).filter(Boolean))].length;
   
-  const uniqueVillagesCumulative = new Set(
-    churches.map(c => `${c.province?.trim()}|${c.amphoe?.trim()}|${c.tambon?.trim()}|${c.village?.trim() || 'unnamed'}`)
-  );
-  const totalVillagesCount = uniqueVillagesCumulative.size;
+  const totalVillagesCount = churches.reduce((sum, c) => sum + (c.village || 0), 0);
   const totalMembers = openChurches.reduce((sum, c) => sum + (c.participate || 0), 0);
   
   // Impact percentage based on the 84k villages mentioned in the text
@@ -37,7 +34,7 @@ export default async function Home() {
   interface ProvinceAccumulator {
     name: string;
     churches: number;
-    villages: Set<string>;
+    villages: number;
     joined: number;
     baptized: number;
     id: string;
@@ -56,7 +53,7 @@ export default async function Home() {
       acc[provinceName] = {
         name: provinceName,
         churches: 0,
-        villages: new Set<string>(),
+        villages: 0,
         joined: 0, 
         baptized: 0,
         id: provinceName.toLowerCase().replace(/\s+/g, '-'),
@@ -69,9 +66,7 @@ export default async function Home() {
       acc[provinceName].joined += (church.participate || 0);
     }
 
-    // Villages reached are cumulative (including surveyed/closed)
-    const villageKey = `${church.province?.trim()}|${church.amphoe?.trim()}|${church.tambon?.trim()}|${church.village?.trim() || 'unnamed'}`;
-    acc[provinceName].villages.add(villageKey);
+    acc[provinceName].villages += (church.village || 0);
     
     return acc;
   }, {} as Record<string, ProvinceAccumulator>);
@@ -79,7 +74,7 @@ export default async function Home() {
   // Convert map to array of objects compatible with DistrictStats interface
   const provinceStats: DistrictStats[] = Object.values(provinceStatsMap).map(p => ({
     ...p,
-    villages: p.villages.size,
+    villages: p.villages,
     joined: p.joined.toLocaleString(), // Formatting for display
     baptized: "0"
   }));

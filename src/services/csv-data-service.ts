@@ -1,125 +1,50 @@
-import fs from 'fs';
-import path from 'path';
-import Papa from 'papaparse';
-import { z } from 'zod';
+import { getPayload } from 'payload';
+import { unstable_cache } from 'next/cache';
+import configPromise from '@/payload.config';
 import { TimelineStateData, DistrictStats } from '@/data/dummyProvinceData';
+import { ChurchData, ChurchDataSchema } from '@/types/church';
 
-// Define a clean schema with camelCase keys for better DX
-export const ChurchDataSchema = z.object({
-  id: z.string(),
-  submittedTime: z.string(),
-  churchName: z.string(),
-  yearBegan: z.string().optional(),
-  type: z.string().optional(),
-  village: z.string().optional(),
-  province: z.string(),
-  amphoe: z.string(),   // This is the District (Amphoe)
-  tambon: z.string(),   // This is the Sub-district (Tambon)
-  participate: z.number().default(0), // Membership/Attendance
-  coordinates: z.string().optional(),
-  status: z.string(),
-  imageMain: z.string().optional(),
-});
-
-export type ChurchData = z.infer<typeof ChurchDataSchema>;
-
-// Global cache to avoid re-parsing the 16MB file on every request
-let cachedData: ChurchData[] | null = null;
+export { type ChurchData, ChurchDataSchema };
 
 export class CsvDataService {
-  private static filePath = path.join(process.cwd(), 'src/data/estar-data.csv');
 
   /**
-   * Parses the CSV file using streaming for memory efficiency
-   * Handles duplicate columns and maps them to clean keys
+   * Raw fetcher for churches. 
+   * Note: Not cached with unstable_cache because the 11MB JSON exceeds Next.js's 2MB cache limit.
    */
   static async getAllChurches(): Promise<ChurchData[]> {
-    if (cachedData) return cachedData;
-
-    console.log('🚀 Parsing 16MB CSV data...');
-
-    const churches: ChurchData[] = [];
-    const fileStream = fs.createReadStream(this.filePath);
-
-    return new Promise((resolve, reject) => {
-      let districtCount = 0;
-
-      Papa.parse(fileStream, {
-        header: true,
-        skipEmptyLines: true,
-        // Optimization: Transform headers to avoid duplicates and use clean names
-        transformHeader: (header) => {
-          const h = header.trim();
-          if (h === 'Response ID') return 'id';
-          if (h === 'Submitted Time') return 'submittedTime';
-          if (h === 'Church name') return 'churchName';
-          if (h === 'The year the church began') return 'yearBegan';
-          if (h === 'Church type') return 'type';
-          if (h === 'Village') return 'village';
-          if (h === 'province') return 'province';
-          if (h === 'Coordinates of the church') return 'coordinates';
-          if (h === 'Status of the Church') return 'status';
-          if (h === 'Church pictures') return 'imageMain';
-          
-          if (h === 'Participate') return 'participate';
-          
-          // Handle the duplicate 'district' columns at the end
-          if (h === 'district') {
-            districtCount++;
-            // Mapping to Thai administrative levels for clarity
-            // 1st is Amphoe (District), 2nd is Tambon (Sub-district)
-            return districtCount === 1 ? 'amphoe' : 'tambon';
-          }
-          
-          return h;
-        },
-        step: (results) => {
-          // This runs for every row, processing it one by one (streaming)
-          // We cast to Record<string, string> for type safety during extraction
-          const row = results.data as Record<string, string>;
-          
-          // Only push if it has the minimum required data
-          if (row.id && row.churchName) {
-            churches.push({
-              id: row.id,
-              submittedTime: row.submittedTime,
-              churchName: row.churchName,
-              yearBegan: row.yearBegan,
-              type: row.type,
-              village: row.village,
-              province: row.province,
-              amphoe: row.amphoe,
-              tambon: row.tambon,
-              participate: parseInt(row.participate || '0', 10),
-              coordinates: row.coordinates,
-              status: row.status,
-              imageMain: row.imageMain,
-            });
-          }
-        },
-        complete: () => {
-          cachedData = churches;
-          resolve(churches);
-        },
-        error: (error) => {
-          reject(error);
-        },
+    try {
+      const payload = await getPayload({ config: configPromise });
+      const latestUpload = await payload.find({
+        collection: 'data-uploads',
+        sort: '-createdAt',
+        limit: 1,
       });
-    });
+
+      if (!latestUpload.docs.length) return [];
+      
+      const doc = latestUpload.docs[0];
+      return (doc.results as ChurchData[]) || [];
+    } catch (error) {
+      console.error('❌ Error in getAllChurches:', error);
+      return [];
+    }
   }
+
 
   /**
-   * Helper to clear cache if you know the file has changed
+   * Cached version of getImpactTrackerStats
    */
-  static clearCache() {
-    cachedData = null;
-  }
+  static getImpactTrackerStats = unstable_cache(
+    async (provinceThaiName: string = 'นครสวรรค์') => this.calculateImpactTrackerStats(provinceThaiName),
+    ['impact-stats'],
+    { tags: ['csv-data'] }
+  );
 
   /**
    * Aggregates stats for the ImpactTracker component (Nakhon Sawan specific)
-   * Groups records into 4 phases: The Start (<2024), One Year In (2024), Today (2025), Next Year (Projection)
    */
-  static async getImpactTrackerStats(provinceThaiName: string = 'นครสวรรค์'): Promise<Record<number, TimelineStateData>> {
+  private static async calculateImpactTrackerStats(provinceThaiName: string = 'นครสวรรค์'): Promise<Record<number, TimelineStateData>> {
     const churches = await this.getAllChurches();
     const provinceChurches = churches.filter(c => c.province.trim() === provinceThaiName);
 
@@ -160,17 +85,14 @@ export class CsvDataService {
         });
         
         const distOpenRecords = distPhaseRecords.filter(c => c.status?.trim() === 'เปิดอยู่');
-        
         const joinedCount = distOpenRecords.reduce((sum, c) => sum + (c.participate || 0), 0);
-        const uniqueVillages = new Set(distPhaseRecords.map(c => 
-          `${c.province?.trim()}|${c.amphoe?.trim()}|${c.tambon?.trim()}|${c.village?.trim() || 'unnamed'}`
-        )).size;
+        const totalVillagesInDistrict = distPhaseRecords.reduce((sum, c) => sum + (c.village || 0), 0);
 
         return {
           id: engName.toLowerCase().replace(/\s+/g, '-'),
           name: engName,
           churches: distOpenRecords.length,
-          villages: uniqueVillages,
+          villages: totalVillagesInDistrict,
           joined: joinedCount.toLocaleString(),
           baptized: "0",
           coordinates: [0, 0] as [number, number]
@@ -178,9 +100,7 @@ export class CsvDataService {
       });
 
       const totalJoined = openRecords.reduce((sum, c) => sum + (c.participate || 0), 0);
-      const totalVillages = new Set(phaseRecords.map(c => 
-        `${c.province?.trim()}|${c.amphoe?.trim()}|${c.tambon?.trim()}|${c.village?.trim() || 'unnamed'}`
-      )).size;
+      const totalVillages = phaseRecords.reduce((sum, c) => sum + (c.village || 0), 0);
 
       return {
         label,
