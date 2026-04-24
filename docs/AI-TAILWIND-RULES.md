@@ -5,6 +5,7 @@ Keep code clean, readable, and maintainable for developers.
 
 AI should prefer reusable styling patterns over long inline Tailwind class strings.
 
+
 ---
 
 ## Core Rules
