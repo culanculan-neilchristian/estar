@@ -3,6 +3,7 @@ import { unstable_cache } from 'next/cache';
 import configPromise from '@/payload.config';
 import { TimelineStateData, DistrictStats } from '@/data/dummyProvinceData';
 import { ChurchData, ChurchDataSchema } from '@/types/church';
+import { normalizeProvince, getThaiProvinceName } from '@/utils/province-utils';
 
 export { type ChurchData, ChurchDataSchema };
 
@@ -35,18 +36,23 @@ export class CsvDataService {
   /**
    * Cached version of getImpactTrackerStats
    */
-  static getImpactTrackerStats = unstable_cache(
-    async (provinceThaiName: string = 'นครสวรรค์') => this.calculateImpactTrackerStats(provinceThaiName),
-    ['impact-stats'],
-    { tags: ['csv-data'] }
-  );
+  static getImpactTrackerStats = (provinceThaiName: string = 'นครสวรรค์') => 
+    unstable_cache(
+      async () => this.calculateImpactTrackerStats(provinceThaiName),
+      ['impact-stats', provinceThaiName],
+      { tags: ['csv-data'] }
+    )();
 
   /**
    * Aggregates stats for the ImpactTracker component (Nakhon Sawan specific)
    */
   private static async calculateImpactTrackerStats(provinceThaiName: string = 'นครสวรรค์'): Promise<Record<number, TimelineStateData>> {
     const churches = await this.getAllChurches();
-    const provinceChurches = churches.filter(c => c.province.trim() === provinceThaiName);
+    
+    // Normalize target name to English for comparison
+    const targetEngName = normalizeProvince(provinceThaiName);
+    
+    const provinceChurches = churches.filter(c => normalizeProvince(c.province) === targetEngName);
 
     // Comprehensive District mapping for Nakhon Sawan
     const DISTRICT_MAP: Record<string, string> = {

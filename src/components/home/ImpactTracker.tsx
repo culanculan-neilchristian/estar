@@ -25,13 +25,7 @@ const ImpactTracker = ({ data }: ImpactTrackerProps) => {
     // Find selected district data or provide fallback to province totals if none selected
     const selectedDistrict = currentState.districts.find(d => d.name === selectedDistrictName) || null;
 
-    const displayData = selectedDistrict ? {
-        name: selectedDistrict.name,
-        churches: selectedDistrict.churches,
-        villages: selectedDistrict.villages,
-        joined: selectedDistrict.joined,
-        isAggregated: false
-    } : {
+    const displayData = {
         name: "Nakhon Sawan Province",
         churches: currentState.churches,
         villages: currentState.villages,
@@ -104,7 +98,7 @@ const ImpactTracker = ({ data }: ImpactTrackerProps) => {
                             {[
                                 { icon: Church, label: "CHURCHES PLANTED", value: displayData.churches },
                                 { icon: Megaphone, label: "VILLAGES REACHED", value: displayData.villages },
-                                { icon: UserRound, label: "JOINED MEMBERS", value: displayData.joined }
+                                { icon: UserRound, label: "BAPTIZED MEMBERS", value: displayData.joined }
                             ].map((stat, i) => (
                                 <div key={i} className={`flex flex-col items-center text-center group cursor-default reveal-on-scroll fade-up ${isVisible ? 'is-visible' : ''}`} style={{ transitionDelay: `${500 + (i * 100)}ms` }}>
                                     <div className="w-24 h-24 rounded-full bg-white flex items-center justify-center mb-6 transition-all duration-500 shadow-xl group-hover:scale-105">

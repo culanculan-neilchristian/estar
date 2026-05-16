@@ -51,15 +51,19 @@ export const DataUploads: CollectionConfig = {
                 if (h === 'The year the church began') return 'yearBegan';
                 if (h === 'Church type') return 'type';
                 if (h === 'Village') return 'village';
-                if (h === 'province') return 'province';
+                if (h === 'province' || h === 'Provincial region') {
+                  return 'province';
+                }
                 if (h === 'Coordinates of the church') return 'coordinates';
                 if (h === 'Status of the Church') return 'status';
                 if (h === 'Church pictures') return 'imageMain';
                 if (h === 'Participate') return 'participate';
                 
-                if (h === 'district') {
-                  districtCount++;
-                  return districtCount === 1 ? 'amphoe' : 'tambon';
+                if (h === 'district' || h === 'District Church') {
+                  return 'amphoe';
+                }
+                if (h === 'sub district' || h === 'Sub District') {
+                  return 'tambon';
                 }
                 return h;
               }

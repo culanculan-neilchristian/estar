@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Container from './Container';
+import PrintButton from './PrintButton';
 
 const Header = () => {
     return (
@@ -21,20 +22,23 @@ const Header = () => {
                     </div>
                 </div>
 
-                <nav>
-                    <ul className="flex items-center space-x-8">
-                        {['Home', 'About Us', 'The Movement', 'Stories', 'Donate', 'Contact'].map((item) => (
-                            <li key={item}>
-                                <Link 
-                                    href={item === 'Home' ? '/' : `/${item.toLowerCase().replace(/\s+/g, '-')}`}
-                                    className="text-sm font-medium text-white/80 hover:text-white transition-colors duration-200 tracking-wide"
-                                >
-                                    {item}
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                </nav>
+                <div className="flex items-center gap-8">
+                    <nav className="hidden lg:block">
+                        <ul className="flex items-center space-x-8">
+                            {['Home', 'About Us', 'The Movement', 'Stories', 'Donate', 'Contact'].map((item) => (
+                                <li key={item}>
+                                    <Link 
+                                        href={item === 'Home' ? '/' : `/${item.toLowerCase().replace(/\s+/g, '-')}`}
+                                        className="text-sm font-medium text-white/80 hover:text-white transition-colors duration-200 tracking-wide"
+                                    >
+                                        {item}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </nav>
+                    <PrintButton />
+                </div>
             </Container>
         </header>
     );
