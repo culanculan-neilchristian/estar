@@ -50,6 +50,8 @@ const ACTUAL_DATA: ResultData = {
 
 
 const ResultCard = ({ data, isVisible }: { data: ResultData; isVisible: boolean }) => {
+    const [selectedDistrict, setSelectedDistrict] = React.useState<string | null>(null);
+
     // Map the ResultData to DistrictStats format for the SVG map component
     const mapStats = data.districts.map(d => ({
         id: d.name.toLowerCase().replace(/\s+/g, '-'),
@@ -69,6 +71,8 @@ const ResultCard = ({ data, isVisible }: { data: ResultData; isVisible: boolean 
             <div className="relative aspect-[4/3] w-full mb-16 px-4">
                 <div className="absolute inset-0 transition-opacity duration-700">
                     <NakhonSawanSvgMap 
+                        activeDistrict={selectedDistrict}
+                        onDistrictSelect={(name) => setSelectedDistrict(name === selectedDistrict ? null : name)}
                         customDistrictsData={mapStats}
                     />
                 </div>
@@ -101,7 +105,7 @@ const ResultCard = ({ data, isVisible }: { data: ResultData; isVisible: boolean 
                 <span className="text-2xl font-black text-white">
                     {isVisible ? <CountUp end={parseFloat(data.members.replace(/,/g, ''))} duration={1500} /> : '0'}
                 </span>
-                <span className="text-[9px] font-black text-white/30 uppercase tracking-widest mt-1">MEMBERS</span>
+                <span className="text-[9px] font-black text-white/30 uppercase tracking-widest mt-1">BAPTIZED</span>
             </div>
             </div>
         </div>

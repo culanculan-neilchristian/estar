@@ -6,10 +6,11 @@ import ExponentialResults from '@/components/home/ExponentialResults';
 import { CsvDataService } from '@/services/csv-data-service';
 import { DistrictStats } from '@/data/dummyProvinceData';
 import { PROVINCE_MAPPING } from '@/data/provinceMapping';
+import { normalizeProvince, getThaiProvinceName } from '@/utils/province-utils';
 
 export default async function Home() {
   const churches = await CsvDataService.getAllChurches();
-  const nakhonSawanStats = await CsvDataService.getImpactTrackerStats("นครสวรรค์");
+  const nakhonSawanStats = await CsvDataService.getImpactTrackerStats(getThaiProvinceName("Nakhon Sawan"));
   
   // Calculate Global Stats
   const openChurches = churches.filter(c => c.status?.trim() === 'เปิดอยู่');
@@ -45,9 +46,7 @@ export default async function Home() {
   const provinceStatsMap = churches.reduce((acc, church) => {
     const rawProvince = church.province?.trim();
     if (!rawProvince) return acc;
-
-    // Map Thai province name to English name used in SVG data
-    const provinceName = PROVINCE_MAPPING[rawProvince] || rawProvince;
+    const provinceName = normalizeProvince(rawProvince);
     
     if (!acc[provinceName]) {
       acc[provinceName] = {

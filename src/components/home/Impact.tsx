@@ -29,7 +29,7 @@ const ImpactContent = ({ stats }: ImpactProps) => {
         {
             icon: Users,
             value: stats.totalMembers.toLocaleString(),
-            label: "JOINED MEMBERS"
+            label: "BAPTIZED MEMBERS"
         },
         {
             icon: MapPin,

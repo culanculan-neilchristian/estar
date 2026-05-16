@@ -93,3 +93,37 @@ body {
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
+/* ==========================================================================
+   Print & PDF Generation Styles
+   ========================================================================== */
+
+/* This class is added to the body via JS specifically during PDF generation */
+.is-printing {
+  /* Force all scroll-reveal elements to be visible for the capture */
+  .reveal-on-scroll {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+@media print {
+  /* Prevent elements from being cut awkwardly between pages */
+  section, article, footer, header, .card, .grid, table, tr, img, h1, h2, h3, blockquote {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Force background colors and images to be preserved */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
+
+/* Custom page break utility if needed manually */
+.pdf-page-break {
+  page-break-before: always;
+  break-before: page;
+}
