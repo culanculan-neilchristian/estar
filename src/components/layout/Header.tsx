@@ -23,7 +23,7 @@ const Header = () => {
                 <div className="flex items-center gap-8">
                     <nav className="hidden lg:block">
                         <ul className="flex items-center space-x-8">
-                            {[].map((item) => (
+                            {['Home'].map((item) => (
                                 <li key={item}>
                                     <Link 
                                         href={item === 'Home' ? '/' : `/${item.toLowerCase().replace(/\s+/g, '-')}`}
