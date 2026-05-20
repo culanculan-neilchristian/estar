@@ -161,7 +161,7 @@ const AboutUs = () => {
                                         <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center mb-4 shadow-xl">
                                             <stat.icon className="w-8 h-8 text-black" />
                                         </div>
-                                        <span className="text-[10px] font-black text-white/50 uppercase tracking-[0.2em] leading-relaxed max-w-[120px]">
+                                        <span className="text-[10px] font-semibold text-white/50 uppercase tracking-[0.2em] leading-relaxed max-w-[120px]">
                                             {stat.label}
                                         </span>
                                     </div>
@@ -301,7 +301,7 @@ const AboutUs = () => {
                                             {/* Pointer Triangle */}
                                             <div className={`absolute top-1/2 -translate-y-1/2 hidden md:block w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent ${index % 2 === 0 ? '-right-4 border-l-[16px] border-l-white' : '-left-4 border-r-[16px] border-r-white'}`} />
                                             
-                                            <h3 className="text-xl md:text-2xl font-black text-[#747474] mb-4 tracking-tight leading-tight uppercase italic">
+                                            <h3 className="text-xl md:text-2xl font-semibold text-[#747474] mb-4 tracking-tight leading-tight uppercase italic">
                                                 {item.title}
                                             </h3>
                                             <p className="text-sm md:text-base text-gray-700 leading-relaxed font-normal">
@@ -338,10 +338,10 @@ const AboutUs = () => {
                                 <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center mb-6 shadow-xl">
                                     <stat.icon className="w-10 h-10 text-[#747474]" />
                                 </div>
-                                <span className="text-3xl md:text-4xl font-black text-white mb-2 tracking-tight">
+                                <span className="text-3xl md:text-4xl font-semibold text-white mb-2 tracking-tight">
                                     {stat.value}
                                 </span>
-                                <span className="text-[10px] font-black text-white/80 uppercase tracking-[0.2em]">{stat.label}</span>
+                                <span className="text-[10px] font-semibold text-white/80 uppercase tracking-[0.2em]">{stat.label}</span>
                             </div>
                         ))}
                     </div>
@@ -449,10 +449,10 @@ const AboutUs = () => {
                         </p>
 
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-4">
-                            <button className="px-10 py-5 bg-white text-[#747474] font-black uppercase tracking-widest rounded-full hover:bg-gray-200 transition-all duration-300 shadow-xl scale-100 hover:scale-105">
+                            <button className="px-10 py-5 bg-white text-[#747474] font-semibold uppercase tracking-widest rounded-full hover:bg-gray-200 transition-all duration-300 shadow-xl scale-100 hover:scale-105">
                                 Give Now
                             </button>
-                            <button className="px-10 py-5 bg-black/40 border-2 border-white/20 text-white font-black uppercase tracking-widest rounded-full backdrop-blur-md hover:bg-white hover:text-black transition-all duration-300 scale-100 hover:scale-105">
+                            <button className="px-10 py-5 bg-black/40 border-2 border-white/20 text-white font-semibold uppercase tracking-widest rounded-full backdrop-blur-md hover:bg-white hover:text-black transition-all duration-300 scale-100 hover:scale-105">
                                 Contact Us
                             </button>
                         </div>
