@@ -44,7 +44,7 @@ const Footer = () => {
                     <div className="space-y-8">
                         <h4 className="text-sm font-bold text-white uppercase tracking-widest">Quick Links</h4>
                         <ul className="space-y-4">
-                            {['Home', 'About Us', 'The Movement', 'Stories', 'Donate', 'Contact'].map((link) => (
+                            {['Home'].map((link) => (
                                 <li key={link}>
                                     <Link href="#" className="text-sm text-white hover:text-white/80 transition-colors">{link}</Link>
                                 </li>
