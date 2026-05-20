@@ -63,7 +63,7 @@ const ThailandSvgMap: React.FC<ThailandSvgMapProps> = ({
                             className={`transition-all duration-300 cursor-pointer stroke-[0.3] stroke-black/20 origin-center
                                 ${isSelected || isHovered
                                     ? 'fill-white z-20 shadow-2xl scale-[1.02]' 
-                                    : 'fill-[#3D3D3D]'
+                                    : 'fill-[#215F92]'
                                 }`}
                             onMouseEnter={() => {
                                 setHoveredId(province.id);
@@ -85,7 +85,7 @@ const ThailandSvgMap: React.FC<ThailandSvgMapProps> = ({
             {/* Hint / Instruction */}
             <div className="absolute bottom-6 left-6 flex items-center gap-2">
                 <div className="w-1.5 h-1.5 rounded-full bg-white/50 animate-pulse" />
-                <span className="text-[8px] font-black text-white/30 uppercase tracking-[0.25em]">
+                <span className="text-[8px] font-semibold text-white/30 uppercase tracking-[0.25em]">
                     Hover to explore provinces
                 </span>
             </div>
@@ -100,22 +100,22 @@ const ThailandSvgMap: React.FC<ThailandSvgMapProps> = ({
                     }}
                 >
                     <div className="bg-white rounded-2xl p-4 shadow-2xl border border-black/5 animate-in fade-in zoom-in-95 duration-200 min-w-[180px]">
-                        <h4 className="text-lg font-black text-black mb-2 tracking-tighter uppercase whitespace-nowrap">
+                        <h4 className="text-lg font-semibold text-black mb-2 tracking-tighter uppercase whitespace-nowrap">
                             {displayProvince?.name}
                         </h4>
                         
                         <div className="flex flex-col gap-3">
                             <div className="flex items-center gap-3">
-                                <Church size={18} className="text-black/20" />
-                                <span className="text-xl font-black text-black leading-none">{provinceStats?.churches || 0}</span>
+                                <Church size={18} className="text-[#002E53]" />
+                                <span className="text-xl font-semibold text-black leading-none">{provinceStats?.churches || 0}</span>
                             </div>
                             <div className="flex items-center gap-3">
-                                <Megaphone size={18} className="text-black/20" />
-                                <span className="text-xl font-black text-black leading-none">{provinceStats?.villages || 0}</span>
+                                <Megaphone size={18} className="text-[#002E53]" />
+                                <span className="text-xl font-semibold text-black leading-none">{provinceStats?.villages || 0}</span>
                             </div>
                             <div className="flex items-center gap-3">
-                                <UserRound size={18} className="text-black/20" />
-                                <span className="text-xl font-black text-black leading-none">{provinceStats?.joined || 0}</span>
+                                <UserRound size={18} className="text-[#002E53]" />
+                                <span className="text-xl font-semibold text-black leading-none">{provinceStats?.joined || 0}</span>
                             </div>
                         </div>
                     </div>

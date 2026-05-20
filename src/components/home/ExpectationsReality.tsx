@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { Church, Megaphone, UserRound } from 'lucide-react';
 import Container from '@/components/layout/Container';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
@@ -64,11 +65,11 @@ const ResultCard = ({ data, isVisible }: { data: ResultData; isVisible: boolean 
     }));
 
     return (
-        <div className="flex-1 min-w-[320px] bg-black border border-white/10 rounded-[32px] p-8 md:p-12 transition-all duration-500 hover:border-white/20 group">
-            <h3 className="text-2xl font-bold text-white text-center mb-12 tracking-tight">{data.title}</h3>
+        <div className="flex-1 min-w-[320px] bg-white border border-[#023862]/10 rounded-[32px] p-8 transition-all duration-500 hover:border-[#023862]/20 shadow-lg shadow-[#023862]/5 group">
+            <h3 className="text-2xl font-bold text-[#023862] text-center mb-12 tracking-tight">{data.title}</h3>
             
             {/* Map Container */}
-            <div className="relative aspect-[4/3] w-full mb-16 px-4">
+            <div className="relative aspect-[4/3] w-full mb-3 px-4">
                 <div className="absolute inset-0 transition-opacity duration-700">
                     <NakhonSawanSvgMap 
                         activeDistrict={selectedDistrict}
@@ -79,33 +80,33 @@ const ResultCard = ({ data, isVisible }: { data: ResultData; isVisible: boolean 
             </div>
 
         {/* Stats Row */}
-        <div className="grid grid-cols-3 gap-4 pt-10 border-t border-white/5">
+        <div className="grid grid-cols-3 gap-4 pt-10 border-t border-[#023862]/10">
             <div className="flex flex-col items-center">
-                <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center mb-3">
-                    <Church className="w-6 h-6 text-black" />
+                <div className="w-14 h-14 bg-white border-2 border-[#2E7AB8] rounded-full flex items-center justify-center mb-3">
+                    <Church className="w-6 h-6 text-[#2E7AB8]" />
                 </div>
-                <span className="text-2xl font-black text-white">
+                <span className="text-2xl font-semibold text-[#023862]">
                     {isVisible ? <CountUp end={data.churches} duration={1500} /> : '0'}
                 </span>
-                <span className="text-[9px] font-black text-white/30 uppercase tracking-widest mt-1">CHURCHES</span>
+                <span className="text-[9px] font-semibold text-[#023862]/70 uppercase tracking-widest mt-1">CHURCHES</span>
             </div>
             <div className="flex flex-col items-center">
-                <div className="w-14 h-14 bg-white/10 border border-white/10 rounded-full flex items-center justify-center mb-3">
-                    <Megaphone className="w-6 h-6 text-white" />
+                <div className="w-14 h-14 bg-white border-2 border-[#2E7AB8] rounded-full flex items-center justify-center mb-3">
+                    <Megaphone className="w-6 h-6 text-[#2E7AB8]" />
                 </div>
-                <span className="text-2xl font-black text-white">
+                <span className="text-2xl font-semibold text-[#023862]">
                     {isVisible ? <CountUp end={data.villages} duration={1500} /> : '0'}
                 </span>
-                <span className="text-[9px] font-black text-white/30 uppercase tracking-widest mt-1">VILLAGES</span>
+                <span className="text-[9px] font-semibold text-[#023862]/70 uppercase tracking-widest mt-1">VILLAGES</span>
             </div>
             <div className="flex flex-col items-center">
-                <div className="w-14 h-14 bg-white/10 border border-white/10 rounded-full flex items-center justify-center mb-3">
-                    <UserRound className="w-6 h-6 text-white" />
+                <div className="w-14 h-14 bg-white border-2 border-[#2E7AB8] rounded-full flex items-center justify-center mb-3">
+                    <UserRound className="w-6 h-6 text-[#2E7AB8]" />
                 </div>
-                <span className="text-2xl font-black text-white">
+                <span className="text-2xl font-semibold text-[#023862]">
                     {isVisible ? <CountUp end={parseFloat(data.members.replace(/,/g, ''))} duration={1500} /> : '0'}
                 </span>
-                <span className="text-[9px] font-black text-white/30 uppercase tracking-widest mt-1">BAPTIZED</span>
+                <span className="text-[9px] font-semibold text-[#023862]/70 uppercase tracking-widest mt-1">BAPTIZED</span>
             </div>
             </div>
         </div>
@@ -134,11 +135,26 @@ const ExpectationsReality = ({ actualData2024 }: ExpectationsRealityProps) => {
     } : ACTUAL_DATA;
 
     return (
-        <section ref={ref} className="bg-black py-24 border-t border-white/5">
-            <Container>
-                <div className={`text-center mb-20 max-w-4xl mx-auto reveal-on-scroll fade-up ${isVisible ? 'is-visible' : ''}`}>
+        <section
+            ref={ref}
+            className="relative py-20 border-t border-white/10 overflow-hidden bg-[#3584C7]"
+        >
+            <div className="absolute inset-x-0 top-0 pointer-events-none" aria-hidden>
+                <Image
+                    src="/baptist-banner.jpg"
+                    alt=""
+                    width={1920}
+                    height={964}
+                    unoptimized
+                    priority
+                    className="!h-auto w-full"
+                    style={{ height: 'auto' }}
+                />
+            </div>
+            <Container className="relative z-10">
+                <div className={`text-center mb-10 max-w-4xl mx-auto reveal-on-scroll fade-up ${isVisible ? 'is-visible' : ''}`}>
                     <h2 className="heading-1 mb-6 text-white text-3xl font-bold tracking-tight">Expectations & Reality</h2>
-                    <p className="paragraph text-white/60 text-lg leading-relaxed">
+                    <p className="paragraph text-white text-lg leading-relaxed">
                         What began as a bold vision to reach 311 house churches and 3 district churches across the province 
                         of Nakhon Sawan has quickly grown beyond anything we projected. By 2024 year end, God opened doors 
                         wider than expected—allowing us to reach {dynamicActual.churches} house churches, welcoming {dynamicActual.members} members.

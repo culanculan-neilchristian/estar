@@ -36,13 +36,13 @@ export default async function ChurchesPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-8">
             <div className="bg-white/5 border border-white/10 p-6 rounded-2xl backdrop-blur-sm">
               <Church className="w-6 h-6 text-white/40 mb-3" />
-              <div className="text-2xl font-black">{totalChurches.toLocaleString()}</div>
-              <div className="text-[10px] font-black uppercase tracking-widest text-white/40">Total Churches</div>
+              <div className="text-2xl font-semibold">{totalChurches.toLocaleString()}</div>
+              <div className="text-[10px] font-semibold uppercase tracking-widest text-white/40">Total Churches</div>
             </div>
             <div className="bg-white/5 border border-white/10 p-6 rounded-2xl backdrop-blur-sm">
               <MapPin className="w-6 h-6 text-white/40 mb-3" />
-              <div className="text-2xl font-black">{provinces}</div>
-              <div className="text-[10px] font-black uppercase tracking-widest text-white/40">Provinces Covered</div>
+              <div className="text-2xl font-semibold">{provinces}</div>
+              <div className="text-[10px] font-semibold uppercase tracking-widest text-white/40">Provinces Covered</div>
             </div>
             {/* Add more stats if needed */}
           </div>
@@ -59,7 +59,7 @@ export default async function ChurchesPage() {
                 <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center shadow-lg transition-transform duration-500 group-hover:scale-110">
                   <Church className="w-6 h-6 text-black" />
                 </div>
-                <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
+                <span className={`px-3 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider ${
                   church.status === 'เปิดอยู่' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
                 }`}>
                   {church.status}
@@ -82,7 +82,7 @@ export default async function ChurchesPage() {
               </div>
 
               <div className="mt-8 pt-6 border-t border-white/5 flex justify-between items-center">
-                <div className="text-[10px] font-black text-white/30 uppercase tracking-widest">
+                <div className="text-[10px] font-semibold text-white/30 uppercase tracking-widest">
                   ID: {church.id}
                 </div>
                 <button className="text-xs font-bold uppercase tracking-widest hover:text-white text-white/60 transition-colors">

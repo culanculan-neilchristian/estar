@@ -57,10 +57,10 @@ const NakhonSawanSvgMap: React.FC<NakhonSawanSvgMapProps> = ({
                         <path
                             key={district.id}
                             d={district.path}
-                            className={`transition-all duration-300 cursor-pointer stroke-[0.5] stroke-black/20 origin-center
+                            className={`transition-all duration-300 cursor-pointer stroke-[0.5] stroke-white origin-center
                                 ${isSelected || isHovered
-                                    ? 'fill-white z-20 shadow-2xl scale-[1.05]' 
-                                    : 'fill-[#3D3D3D]'
+                                    ? 'fill-[#056AB1] z-20 shadow-2xl scale-[1.05]' 
+                                    : 'fill-[#8FB9DC]'
                                 }`}
                              onMouseEnter={() => setHoveredId(district.id)}
                             onMouseLeave={() => setHoveredId(null)}
@@ -74,9 +74,9 @@ const NakhonSawanSvgMap: React.FC<NakhonSawanSvgMapProps> = ({
             </svg>
 
             {/* Hint / Instruction */}
-            <div className="absolute bottom-6 left-6 flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                <span className="text-[8px] font-black text-white/30 uppercase tracking-[0.25em]">
+            <div className="map-hint absolute bottom-6 left-6 flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#023862]/40 animate-pulse" />
+                <span className="text-[8px] font-semibold text-[#023862]/40 uppercase tracking-[0.25em]">
                     Click any region to explore growth
                 </span>
             </div>
@@ -90,23 +90,23 @@ const NakhonSawanSvgMap: React.FC<NakhonSawanSvgMapProps> = ({
                         top: `${(hoveredId ? mousePos.y : stickyPos.y) - 20}px`,
                     }}
                 >
-                    <div className="bg-white rounded-[32px] p-6 shadow-2xl border border-black/5 animate-in fade-in zoom-in-95 duration-200">
-                        <h4 className="text-xl font-black text-black mb-3 tracking-tighter">
+                    <div className="district-tooltip bg-[#4492C8] rounded-[32px] p-6 shadow-2xl border border-black/5 animate-in fade-in zoom-in-95 duration-200 text-white">
+                        <h4 className="text-xl font-semibold text-white mb-3 tracking-tighter">
                             {displayDistrict?.name}
                         </h4>
                         
                         <div className="flex flex-col gap-2">
                             <div className="flex items-center gap-3">
-                                <Church size={18} className="text-black/30" />
-                                <span className="text-xl font-black text-black leading-none">{districtStats?.churches || 0}</span>
+                                <Church size={18} className="text-white" />
+                                <span className="text-xl font-semibold text-white leading-none">{districtStats?.churches || 0}</span>
                             </div>
                             <div className="flex items-center gap-3">
-                                <Megaphone size={18} className="text-black/30" />
-                                <span className="text-xl font-black text-black leading-none">{districtStats?.villages || 0}</span>
+                                <Megaphone size={18} className="text-white" />
+                                <span className="text-xl font-semibold text-white leading-none">{districtStats?.villages || 0}</span>
                             </div>
                             <div className="flex items-center gap-3">
-                                <UserRound size={18} className="text-black/30" />
-                                <span className="text-xl font-black text-black leading-none">{districtStats?.joined || 0}</span>
+                                <UserRound size={18} className="text-white" />
+                                <span className="text-xl font-semibold text-white leading-none">{districtStats?.joined || 0}</span>
                             </div>
                         </div>
                     </div>

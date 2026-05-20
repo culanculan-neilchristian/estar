@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
-import { Gothic_A1 } from "next/font/google";
+import { Raleway } from "next/font/google";
 import "@/styles/globals.css";
 import ReactQueryProvider from "@/components/ReactQueryProvider";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Script from "next/script";
 
-const gothicA1 = Gothic_A1({
-  variable: "--font-gothic-a1",
+const raleway = Raleway({
+  variable: "--font-raleway",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "700", "900"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -23,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={gothicA1.variable}>
+    <html lang="en" className={raleway.variable}>
       <head>
         {/* jsPDF and html-to-image for high-quality PDF generation with modern CSS support */}
         <Script 
