@@ -44,3 +44,8 @@ next-env.d.ts
 /public/media/*
 !/public/media/.gitkeep
 /uploads
+!/uploads/
+/uploads/*
+!/uploads/data/
+/uploads/data/*
+!/uploads/data/Studio 2 - Studio 2.csv (1).csv
