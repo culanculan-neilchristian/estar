@@ -34,8 +34,32 @@ function normalizeDistrictName(name: string | undefined): string {
 }
 
 export class CsvDataService {
+  private static async getLatestUploadedChurches(): Promise<ChurchData[]> {
+    try {
+      const [{ getPayload }, { default: configPromise }] = await Promise.all([
+        import('payload'),
+        import('../payload.config'),
+      ]);
+      const payload = await getPayload({ config: configPromise });
+      const latestUpload = await payload.find({
+        collection: 'data-uploads',
+        sort: '-createdAt',
+        limit: 1,
+      });
+
+      const doc = latestUpload.docs[0];
+      const churches = (doc?.results as ChurchData[] | undefined) || [];
+      console.log(`[CSV-DATA] Loaded ${churches.length} churches from latest admin upload`);
+      return churches;
+    } catch (error) {
+      console.error('[CSV-DATA] Error reading latest admin upload:', error);
+      return [];
+    }
+  }
+
   /**
-   * Reads church data from the single source CSV file.
+   * Reads church data from the source CSV file. If the server cannot read
+   * the file, use the latest parsed admin upload to avoid serving zero data.
    */
   static async getAllChurches(): Promise<ChurchData[]> {
     try {
@@ -45,7 +69,7 @@ export class CsvDataService {
       return churches;
     } catch (error) {
       console.error(`[CSV-DATA] Error reading ${CHURCH_CSV_FILE_PATH}:`, error);
-      return [];
+      return this.getLatestUploadedChurches();
     }
   }
 

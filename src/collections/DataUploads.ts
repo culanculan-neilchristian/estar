@@ -39,14 +39,17 @@ export const DataUploads: CollectionConfig = {
           
           try {
             const csvString = req.file.data.toString('utf8');
-            await mkdir(path.dirname(CHURCH_CSV_FILE_PATH), { recursive: true });
-            await writeFile(CHURCH_CSV_FILE_PATH, req.file.data);
-
             const churches = parseChurchCsv(csvString);
-
             data.results = churches;
-            console.log(`[CSV-PROCESS] Wrote ${req.file.name} to ${CHURCH_CSV_FILE_PATH}`);
             console.log(`[CSV-PROCESS] Successfully parsed ${churches.length} churches.`);
+
+            try {
+              await mkdir(path.dirname(CHURCH_CSV_FILE_PATH), { recursive: true });
+              await writeFile(CHURCH_CSV_FILE_PATH, req.file.data);
+              console.log(`[CSV-PROCESS] Wrote ${req.file.name} to ${CHURCH_CSV_FILE_PATH}`);
+            } catch (writeError) {
+              console.warn(`[CSV-PROCESS] Could not write CSV file to ${CHURCH_CSV_FILE_PATH}:`, writeError);
+            }
           } catch (err) {
             console.error('[CSV-PROCESS] Error parsing CSV:', err);
           }
