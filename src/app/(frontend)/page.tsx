@@ -5,22 +5,23 @@ import TransformedLives from '@/components/home/TransformedLives';
 import ExponentialResults from '@/components/home/ExponentialResults';
 import { CsvDataService } from '@/services/csv-data-service';
 import { DistrictStats } from '@/data/dummyProvinceData';
-import { PROVINCE_MAPPING } from '@/data/provinceMapping';
 import { normalizeProvince, getThaiProvinceName } from '@/utils/province-utils';
+
+const OPEN_STATUS = '\u0e40\u0e1b\u0e34\u0e14\u0e2d\u0e22\u0e39\u0e48';
 
 export default async function Home() {
   const churches = await CsvDataService.getAllChurches();
-  const nakhonSawanStats = await CsvDataService.getImpactTrackerStats(getThaiProvinceName("Nakhon Sawan"));
-  
+  const nakhonSawanStats = await CsvDataService.getImpactTrackerStats(getThaiProvinceName('Nakhon Sawan'));
+
   // Calculate Global Stats
-  const openChurches = churches.filter(c => c.status?.trim() === 'เปิดอยู่');
+  const openChurches = churches.filter(c => c.status?.trim() === OPEN_STATUS);
   const totalChurches = openChurches.length;
   // Cumulative Footprint (All provinces/villages ever reached)
   const totalProvincesCount = [...new Set(churches.map(c => c.province?.trim()).filter(Boolean))].length;
-  
+
   const totalVillagesCount = churches.reduce((sum, c) => sum + (c.village || 0), 0);
   const totalMembers = openChurches.reduce((sum, c) => sum + (c.participate || 0), 0);
-  
+
   // Impact percentage based on the 84k villages mentioned in the text
   const impactPercentage = totalVillagesCount > 0 ? (totalVillagesCount / 84000) * 100 : 0;
 
@@ -29,7 +30,7 @@ export default async function Home() {
     totalProvinces: totalProvincesCount,
     totalVillages: totalVillagesCount,
     totalMembers,
-    impactPercentage
+    impactPercentage,
   };
 
   interface ProvinceAccumulator {
@@ -47,26 +48,26 @@ export default async function Home() {
     const rawProvince = church.province?.trim();
     if (!rawProvince) return acc;
     const provinceName = normalizeProvince(rawProvince);
-    
+
     if (!acc[provinceName]) {
       acc[provinceName] = {
         name: provinceName,
         churches: 0,
         villages: 0,
-        joined: 0, 
+        joined: 0,
         baptized: 0,
         id: provinceName.toLowerCase().replace(/\s+/g, '-'),
-        coordinates: [0, 0] as [number, number]
+        coordinates: [0, 0] as [number, number],
       };
     }
 
-    if (church.status?.trim() === 'เปิดอยู่') {
+    if (church.status?.trim() === OPEN_STATUS) {
       acc[provinceName].churches += 1;
       acc[provinceName].joined += (church.participate || 0);
     }
 
     acc[provinceName].villages += (church.village || 0);
-    
+
     return acc;
   }, {} as Record<string, ProvinceAccumulator>);
 
@@ -74,8 +75,8 @@ export default async function Home() {
   const provinceStats: DistrictStats[] = Object.values(provinceStatsMap).map(p => ({
     ...p,
     villages: p.villages,
-    joined: p.joined.toLocaleString(), // Formatting for display
-    baptized: "0"
+    joined: p.joined.toLocaleString(),
+    baptized: '0',
   }));
 
   return (

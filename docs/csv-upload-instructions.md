@@ -1,6 +1,6 @@
 # 📊 CSV Upload & Data Format Guidelines
 
-This document provides comprehensive steps and technical details on how to upload the latest `estar-data.csv` file into the application via Payload CMS, including data format requirements and mandatory headers.
+This document provides steps and technical details on how to upload the latest CSV file into the application via Payload CMS, including data format requirements and mandatory headers.
 
 ---
 
@@ -17,8 +17,10 @@ To update the live dashboard with the latest dataset, follow these steps in the 
    - Select your new `.csv` file containing the updated records.
    - Click **Save / Publish**.
 4. **Automated Processing**:
-   - Upon saving, the system automatically parses the CSV using PapaParse, cleans up old records in the database to optimize space, and triggers a revalidation of the frontend routes (`/` and `/churches`).
-   - The dashboard will **instantly update** in real-time!
+   - Upon saving, the system writes the uploaded file to the single source CSV path:
+     `uploads/data/Studio 2 - Studio 2.csv (1).csv`
+   - The system also parses the CSV with PapaParse for admin metadata, cleans up old upload records, and triggers revalidation for `/` and `/churches`.
+   - The dashboard reads from that one CSV file.
 
 ---
 
@@ -56,6 +58,8 @@ The following table details the expected headers in the CSV file, how they map t
 > [!IMPORTANT]
 > - The columns **`Response ID`** and **`Church name`** are strictly mandatory for each row. If any of these two are missing or blank in a row, the parser will **skip** that row to prevent saving invalid or corrupt data.
 > - The **`Coordinates of the church`** must be simple numbers separated by a comma. Extra text, letters, or formatting within this cell will cause map rendering failures.
+> - If both `Provincial region` and `province` exist, the app prefers `province` and falls back to `Provincial region`.
+> - If both `District Church` and `district` exist, the app uses `district` for Amphoe/district data. `District Church` is not used as the district.
 
 ---
 

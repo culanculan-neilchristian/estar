@@ -9,12 +9,19 @@ interface RawCsvRow {
   type?: string;
   village?: string;
   province?: string;
+  provinceRegion?: string;
   amphoe?: string;
+  districtChurch?: string;
   tambon?: string;
   participate?: string;
   coordinates?: string;
   status?: string;
   imageMain?: string;
+}
+
+function parseCsvNumber(value: string | undefined): number {
+  const parsed = parseInt(value || '0', 10);
+  return Number.isFinite(parsed) ? parsed : 0;
 }
 
 export function parseChurchCsv(csvString: string): ChurchData[] {
@@ -29,12 +36,14 @@ export function parseChurchCsv(csvString: string): ChurchData[] {
       if (h === 'The year the church began') return 'yearBegan';
       if (h === 'Church type') return 'type';
       if (h === 'Village') return 'village';
-      if (h === 'province' || h === 'Provincial region') return 'province';
+      if (h === 'province') return 'province';
+      if (h === 'Provincial region') return 'provinceRegion';
       if (h === 'Coordinates of the church') return 'coordinates';
       if (h === 'Status of the Church') return 'status';
       if (h === 'Church pictures') return 'imageMain';
       if (h === 'Participate') return 'participate';
-      if (h === 'district' || h === 'District Church') return 'amphoe';
+      if (h === 'district') return 'amphoe';
+      if (h === 'District Church') return 'districtChurch';
       if (h === 'sub district' || h === 'Sub District') return 'tambon';
       return h;
     },
@@ -50,11 +59,11 @@ export function parseChurchCsv(csvString: string): ChurchData[] {
       churchName: row.churchName,
       yearBegan: row.yearBegan,
       type: row.type,
-      village: parseInt(row.village || '0', 10),
-      province: row.province || '',
+      village: parseCsvNumber(row.village),
+      province: row.province || row.provinceRegion || '',
       amphoe: row.amphoe || '',
       tambon: row.tambon || '',
-      participate: parseInt(row.participate || '0', 10),
+      participate: parseCsvNumber(row.participate),
       coordinates: row.coordinates,
       status: row.status || '',
       imageMain: row.imageMain,
