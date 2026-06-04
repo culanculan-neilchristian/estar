@@ -1,89 +1,75 @@
-# Thailand Map & Nakhon Sawan Data Mapping Documentation
+# Thailand Map & Nakhon Sawan Data Mapping
 
-This document explains how data is retrieved from the CSV source, processed, and displayed on both the whole Thailand map (Hero section) and the detailed Nakhon Sawan trackers.
+This document explains the current data source and how the same CSV data is used by the Hero Thailand map and the Nakhon Sawan sections.
 
 ## 1. Data Source
-The primary source of truth for all data in this application is:
-- **File Path**: `src\data\estar-data.csv`
-- **Total Records**: ~10,700 rows
-- **Key Columns**:
-  - `province`: Primary filtering (e.g., `นครสวรรค์`).
-  - `district` (1st): Mapped to `amphoe` (District level).
-  - `district` (2nd): Mapped to `tambon` (Sub-district level).
-  - `Church name`: Identifying specific churches.
-  - `Participate`: Membership/attendance count.
-  - `Status of the Church`: Filter for `เปิดอยู่` (Open).
-  - `The year the church began`: Used for timeline tracking.
 
----
+The application now uses one CSV file as the source of truth:
 
-## 2. Whole Thailand Map (Hero Section)
-The interactive map on the Hero section provides a national overview by aggregating data for every province.
+- **File Path**: `uploads/data/Studio 2 - Studio 2.csv (1).csv`
+- **Shared Constant**: `src/services/church-csv-file.ts`
+- **Reader**: `CsvDataService.getAllChurches()` in `src/services/csv-data-service.ts`
+- **Parser**: `parseChurchCsv()` in `src/services/parse-church-csv.ts`
 
-### Data Flow
-1. **Extraction**: `CsvDataService.getAllChurches()` loads all records from the CSV into memory.
-2. **Aggregation**: In `src\app\page.tsx`, records are grouped by province:
-   ```typescript
-   const provinceStatsMap = churches.reduce((acc, church) => {
-     const rawProvince = church.province.trim();
-     const provinceName = PROVINCE_MAPPING[rawProvince] || rawProvince;
-     // Sums total churches and membership (participate) per province
-     return acc;
-   }, {});
-   ```
-3. **Translation**: Thai province names (CSV) are mapped to English IDs (SVG Map) using `src\data\provinceMapping.ts`.
-4. **Interactive Display**:
-   - Aggregated stats are passed to `ThailandSvgMap`.
-   - On hover, the map matches the SVG path's name to the `provinceStats` array to display **Total Churches** and **Total Members** for that province.
+The service does not choose between database records and fallback records. Frontend pages and API routes read from this one file only.
 
----
+When a CSV is uploaded through Payload CMS, `src/collections/DataUploads.ts` writes the uploaded file back to this same path, so the next render/build reads the replacement file.
 
-## 3. Nakhon Sawan Detailed Tracking
-For the Nakhon Sawan section, the application provides deeper district-level insights.
+## 2. Important CSV Columns
 
-### Service Logic
-`CsvDataService.getImpactTrackerStats("นครสวรรค์")` handles this:
-1. **Filtering**: Focuses only on open churches within Nakhon Sawan.
-2. **District Mapping**: Uses an internal `DISTRICT_MAP` to translate Thai names (e.g., `ลาดยาว`) to UI component IDs (e.g., `Lat Yao`).
-3. **Timeline Phases**: Processes data into 5 specific phases (Start, Year 1, Today, Projection, Total) to show growth over time.
-
----
-
-## 4. District vs. Province Distinction
-The application manages two distinct levels of mapping:
-- **Province Level**: Used for the national map. Nakhon Sawan is treated as one of 77 provinces.
-- **District Level (City)**: Used when zooming into a specific province (like Nakhon Sawan). The "City" center specifically refers to the `เมืองนครสวรรค์` (Mueang Nakhon Sawan) district in the CSV.
-
----
-
-## 5. Summary of Key Files
-- [estar-data.csv](file:///c:/RepoOutside/estar/src/data/estar-data.csv): Raw data.
-- [csv-data-service.ts](file:///c:/RepoOutside/estar/src/services/csv-data-service.ts): Core processing logic.
-- [provinceMapping.ts](file:///c:/RepoOutside/estar/src/data/provinceMapping.ts): Name translation layer.
-- [page.tsx](file:///c:/RepoOutside/estar/src/app/page.tsx): Main data orchestration.
-- [ThailandSvgMap.tsx](file:///c:/RepoOutside/estar/src/components/home/ThailandSvgMap.tsx): National map visualization.
-- [NakhonSawanSvgMap.tsx](file:///c:/RepoOutside/estar/src/components/home/NakhonSawanSvgMap.tsx): Province-specific visualization.
-
----
-
-## 6. Detailed Column Mapping
-Below is the exact mapping between the CSV columns and the data points used in the application:
-
-| UI Data Point | CSV Column Name | Notes |
+| UI Data Point | CSV Column | Notes |
 | :--- | :--- | :--- |
-| **Province Name** | `province` | Used to filter Nakhon Sawan (`นครสวรรค์`). |
-| **District (Amphoe)** | `district` (1st occurrence) | The first of the two columns named `district`. |
-| **Sub-district (Tambon)** | `district` (2nd occurrence) | The second of the two columns named `district`. |
-| **Total Churches** | (Row Count) | Filtered by `Status of the Church` = `เปิดอยู่`. |
-| **Total Members** | `Participate` | Summed across rows. |
-| **Baptisms** | (Calculated) | Currently calculated as 67% of `Participate` in some views. |
-| **Church Name** | `Church name` | Displayed in detailed lists. |
-| **Start Year** | `The year the church began` | Used for timeline and growth charts. |
-| **Coordinates** | `Coordinates of the church` | Used for future map plotting. |
-| **Main Image** | `Church pictures` | The URL for church atmosphere/location photos. |
-| **Village Name** | `Village` | Used for location identification. |
+| Province | `province`, fallback `Provincial region` | Used for Hero province totals and Nakhon Sawan filtering. |
+| District / Amphoe | `district` | Used for Nakhon Sawan district grouping. |
+| Church group name | `District Church` | This is not the district; it contains church names such as `คริสตจักรไทท่าตะโก`. |
+| Sub-district | `sub district` | Stored as `tambon`. |
+| Open church status | `Status of the Church` | Open records equal `เปิดอยู่`. |
+| Village count | `Village` | Summed for village totals. |
+| Members / joined | `Participate` | Summed for joined totals. |
+| Start year | `The year the church began` | Used for timeline phases. |
 
----
+## 3. Hero Thailand Map
 
-## 7. Formatting Note
-The CSV uses Thai characters for geographical names. The application uses `PROVINCE_MAPPING` and `DISTRICT_MAP` to translate these to English IDs for SVG path selection and UI routing.
+The Hero map receives `provinceStats` from `src/app/(frontend)/page.tsx`.
+
+For each province:
+
+- `churches`: number of open records where `Status of the Church` is `เปิดอยู่`
+- `villages`: sum of `Village`
+- `joined`: sum of `Participate` for open records
+
+The screenshot Nakhon Sawan tooltip is expected from the current CSV:
+
+```json
+{
+  "churches": 1687,
+  "villages": 12235,
+  "joined": "6,934"
+}
+```
+
+## 4. Nakhon Sawan Tracking
+
+`CsvDataService.getImpactTrackerStats("นครสวรรค์")` filters the same CSV data to Nakhon Sawan and builds timeline phases.
+
+Current totals from the one CSV:
+
+```json
+{
+  "total": 10697,
+  "nakhonSawan": 2151,
+  "open": 1687,
+  "villages": 12235,
+  "joined": 6934
+}
+```
+
+Nakhon Sawan district grouping uses the `district` column after removing spaces and the `อำเภอ` prefix.
+
+## 5. Deployment Note
+
+`/uploads` is ignored by git. On a server, the file must physically exist at:
+
+`uploads/data/Studio 2 - Studio 2.csv (1).csv`
+
+If that file is missing on the server, the app cannot read the large CSV data.

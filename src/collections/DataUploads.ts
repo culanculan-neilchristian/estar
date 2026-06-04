@@ -1,7 +1,9 @@
 import type { CollectionConfig } from 'payload';
+import { mkdir, writeFile } from 'fs/promises';
+import path from 'path';
 import { revalidatePath } from 'next/cache';
+import { CHURCH_CSV_FILE_PATH } from '../services/church-csv-file';
 import { parseChurchCsv } from '../services/parse-church-csv';
-// import { clearChurchCache } from '../utils/cache'; // No longer needed with revalidateTag
 
 export const DataUploads: CollectionConfig = {
   slug: 'data-uploads',
@@ -37,9 +39,13 @@ export const DataUploads: CollectionConfig = {
           
           try {
             const csvString = req.file.data.toString('utf8');
+            await mkdir(path.dirname(CHURCH_CSV_FILE_PATH), { recursive: true });
+            await writeFile(CHURCH_CSV_FILE_PATH, req.file.data);
+
             const churches = parseChurchCsv(csvString);
 
             data.results = churches;
+            console.log(`[CSV-PROCESS] Wrote ${req.file.name} to ${CHURCH_CSV_FILE_PATH}`);
             console.log(`[CSV-PROCESS] Successfully parsed ${churches.length} churches.`);
           } catch (err) {
             console.error('[CSV-PROCESS] Error parsing CSV:', err);
