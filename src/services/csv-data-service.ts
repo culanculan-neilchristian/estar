@@ -1,13 +1,29 @@
+import { readFile } from 'fs/promises';
+import path from 'path';
 import { getPayload } from 'payload';
 import { unstable_cache } from 'next/cache';
 import configPromise from '@/payload.config';
 import { TimelineStateData, DistrictStats } from '@/data/dummyProvinceData';
 import { ChurchData, ChurchDataSchema } from '@/types/church';
-import { normalizeProvince, getThaiProvinceName } from '@/utils/province-utils';
+import { normalizeProvince } from '@/utils/province-utils';
+import { parseChurchCsv } from './parse-church-csv';
 
 export { type ChurchData, ChurchDataSchema };
 
 export class CsvDataService {
+  private static fallbackCsvPath = path.join(process.cwd(), 'uploads', 'data', 'Studio 2 - Studio 2.csv (1).csv');
+
+  private static async getFallbackChurches(): Promise<ChurchData[]> {
+    try {
+      const csvString = await readFile(this.fallbackCsvPath, 'utf8');
+      const churches = parseChurchCsv(csvString);
+      console.log(`[CSV-FALLBACK] Loaded ${churches.length} churches from ${this.fallbackCsvPath}`);
+      return churches;
+    } catch (error) {
+      console.error('[CSV-FALLBACK] Error loading fallback CSV:', error);
+      return [];
+    }
+  }
 
   /**
    * Raw fetcher for churches. 
@@ -22,13 +38,15 @@ export class CsvDataService {
         limit: 1,
       });
 
-      if (!latestUpload.docs.length) return [];
+      if (!latestUpload.docs.length) {
+        return this.getFallbackChurches();
+      }
       
       const doc = latestUpload.docs[0];
       return (doc.results as ChurchData[]) || [];
     } catch (error) {
       console.error('❌ Error in getAllChurches:', error);
-      return [];
+      return this.getFallbackChurches();
     }
   }
 

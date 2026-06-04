@@ -10,6 +10,8 @@ import { DataUploads } from './collections/DataUploads';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
+const parsedMaxUploadSizeMB = Number.parseInt(process.env.MAX_UPLOAD_SIZE_MB || '', 10);
+const maxUploadSizeMB = Number.isFinite(parsedMaxUploadSizeMB) ? parsedMaxUploadSizeMB : 200;
 
 export default buildConfig({
   admin: {
@@ -32,7 +34,7 @@ export default buildConfig({
   sharp,
   upload: {
     limits: {
-      fileSize: 50 * 1024 * 1024, // 50MB
+      fileSize: maxUploadSizeMB * 1024 * 1024, // Defaults to 200MB.
     },
   },
 });
