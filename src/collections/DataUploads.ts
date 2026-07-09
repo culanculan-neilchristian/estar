@@ -1,9 +1,21 @@
-import type { CollectionConfig } from 'payload';
-import { mkdir, writeFile } from 'fs/promises';
+import type { CollectionConfig, File as PayloadFile } from 'payload';
+import { mkdir, readFile, writeFile } from 'fs/promises';
 import path from 'path';
 import { revalidatePath } from 'next/cache';
 import { CHURCH_CSV_FILE_PATH } from '../services/church-csv-file';
 import { parseChurchCsv } from '../services/parse-church-csv';
+
+async function getUploadedCsvBuffer(file: PayloadFile) {
+  if (file.data?.length) {
+    return file.data;
+  }
+
+  if (file.tempFilePath) {
+    return readFile(file.tempFilePath);
+  }
+
+  return null;
+}
 
 export const DataUploads: CollectionConfig = {
   slug: 'data-uploads',
@@ -34,18 +46,25 @@ export const DataUploads: CollectionConfig = {
   hooks: {
     beforeChange: [
       async ({ operation, data, req }) => {
-        if ((operation === 'create' || operation === 'update') && req.file && req.file.data) {
+        if ((operation === 'create' || operation === 'update') && req.file) {
           console.log(`[CSV-PROCESS] Parsing ${req.file.name} into JSON...`);
           
           try {
-            const csvString = req.file.data.toString('utf8');
+            const csvBuffer = await getUploadedCsvBuffer(req.file);
+
+            if (!csvBuffer) {
+              console.warn('[CSV-PROCESS] Upload did not include readable file data.');
+              return data;
+            }
+
+            const csvString = csvBuffer.toString('utf8');
             const churches = parseChurchCsv(csvString);
             data.results = churches;
             console.log(`[CSV-PROCESS] Successfully parsed ${churches.length} churches.`);
 
             try {
               await mkdir(path.dirname(CHURCH_CSV_FILE_PATH), { recursive: true });
-              await writeFile(CHURCH_CSV_FILE_PATH, req.file.data);
+              await writeFile(CHURCH_CSV_FILE_PATH, csvBuffer);
               console.log(`[CSV-PROCESS] Wrote ${req.file.name} to ${CHURCH_CSV_FILE_PATH}`);
             } catch (writeError) {
               console.warn(`[CSV-PROCESS] Could not write CSV file to ${CHURCH_CSV_FILE_PATH}:`, writeError);
@@ -69,6 +88,8 @@ export const DataUploads: CollectionConfig = {
             console.error('[CSV-PROCESS] Error cleaning up old records:', e);
           }
         }
+
+        return data;
       }
     ],
     afterChange: [
