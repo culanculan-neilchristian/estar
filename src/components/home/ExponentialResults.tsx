@@ -10,9 +10,10 @@ import { TimelineStateData } from '@/data/dummyProvinceData';
 
 interface ExponentialResultsProps {
     data?: TimelineStateData;
+    provinceName?: string;
 }
 
-const ExponentialResults = ({ data }: ExponentialResultsProps) => {
+const ExponentialResults = ({ data, provinceName = 'Nakhon Sawan' }: ExponentialResultsProps) => {
     const { ref, isVisible } = useScrollReveal();
     const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
 
@@ -38,6 +39,7 @@ const ExponentialResults = ({ data }: ExponentialResultsProps) => {
                                     activeDistrict={selectedDistrict}
                                     onDistrictSelect={(name) => setSelectedDistrict(name === selectedDistrict ? null : name)}
                                     customDistrictsData={districts}
+                                    activeProvince={provinceName}
                                 />
                             </div>
                         </div>
@@ -49,10 +51,12 @@ const ExponentialResults = ({ data }: ExponentialResultsProps) => {
                             <h2 className={`heading-1 mb-8 text-[#023862] leading-[1.1] reveal-on-scroll fade-up ${isVisible ? 'is-visible' : ''}`}>Exponential Results Beyond</h2>
                             <div className="space-y-6 mb-12">
                                 <p className={`paragraph text-lg text-[#023862]/70 reveal-on-scroll fade-up delay-100 ${isVisible ? 'is-visible' : ''}`}>
-                                    What was funded to spark the planting of 311 churches has ignited a movement 
-                                    far bigger than the sum of its parts. As these new communities multiply, 
-                                    mentor one another, and spread through natural relationships, the impact 
-                                    has accelerated well beyond our projections.
+                                    {provinceName === 'Nakhon Sawan' ? (
+                                        "What was funded to spark the planting of 311 churches has ignited a movement far bigger than the sum of its parts."
+                                    ) : (
+                                        `What was funded to spark the planting of churches in ${provinceName} has ignited a movement far bigger than the sum of its parts.`
+                                    )}
+                                    {" "}As these new communities multiply, mentor one another, and spread through natural relationships, the impact has accelerated well beyond our projections.
                                 </p>
                                 <p className={`paragraph font-bold text-[#023862] italic reveal-on-scroll fade-up delay-200 ${isVisible ? 'is-visible' : ''}`}>
                                     Your investment didn&apos;t just plant churches—it planted a multiplying movement.

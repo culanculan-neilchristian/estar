@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Church, Megaphone, UserRound } from 'lucide-react';
-import { NAKHON_SAWAN_SVG_DATA } from '@/data/nakhonSawanPaths';
+import { PROVINCE_SVG_MAPS } from '@/data/provinceDistrictPaths';
 import { NAKHON_SAWAN_DUMMY_DATA, DistrictStats } from '@/data/dummyProvinceData';
 
 interface NakhonSawanSvgMapProps {
@@ -10,13 +10,15 @@ interface NakhonSawanSvgMapProps {
     activeDistrict?: string | null;
     activeStep?: number;
     customDistrictsData?: DistrictStats[];
+    activeProvince?: string;
 }
 
 const NakhonSawanSvgMap: React.FC<NakhonSawanSvgMapProps> = ({ 
     onDistrictSelect, 
     activeDistrict, 
     activeStep = 2,
-    customDistrictsData
+    customDistrictsData,
+    activeProvince = 'Nakhon Sawan'
 }) => {
     const [hoveredId, setHoveredId] = useState<string | null>(null);
     const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -29,8 +31,10 @@ const NakhonSawanSvgMap: React.FC<NakhonSawanSvgMapProps> = ({
         setMousePos({ x, y });
     };
 
-    const hoveredDistrict = NAKHON_SAWAN_SVG_DATA.find(d => d.id === hoveredId);
-    const activeDistrictData = NAKHON_SAWAN_SVG_DATA.find(d => d.name === activeDistrict);
+    const svgData = PROVINCE_SVG_MAPS[activeProvince] || PROVINCE_SVG_MAPS['Nakhon Sawan'];
+
+    const hoveredDistrict = svgData.find(d => d.id === hoveredId);
+    const activeDistrictData = svgData.find(d => d.name === activeDistrict);
     const displayDistrict = hoveredDistrict || activeDistrictData;
     
     // Use custom data if provided, otherwise fallback to timeline data
@@ -49,7 +53,7 @@ const NakhonSawanSvgMap: React.FC<NakhonSawanSvgMapProps> = ({
                 xmlns="http://www.w3.org/2000/svg"
             >
                 {/* District Paths */}
-                {NAKHON_SAWAN_SVG_DATA.map((district) => {
+                {svgData.map((district) => {
                     const isHovered = hoveredId === district.id;
                     const isSelected = activeDistrict === district.name;
                     
