@@ -1,17 +1,19 @@
-import Hero from '@/components/home/Hero';
-import ImpactTracker from '@/components/home/ImpactTracker';
-import ExpectationsReality from '@/components/home/ExpectationsReality';
-import TransformedLives from '@/components/home/TransformedLives';
-import ExponentialResults from '@/components/home/ExponentialResults';
+import HomeClient from '@/components/home/HomeClient';
 import { CsvDataService } from '@/services/csv-data-service';
 import { DistrictStats } from '@/data/dummyProvinceData';
 import { normalizeProvince, getThaiProvinceName } from '@/utils/province-utils';
+
+import { PROVINCE_SVG_MAPS } from '@/data/provinceDistrictPaths';
 
 const OPEN_STATUS = '\u0e40\u0e1b\u0e34\u0e14\u0e2d\u0e22\u0e39\u0e48';
 
 export default async function Home() {
   const churches = await CsvDataService.getAllChurches();
-  const nakhonSawanStats = await CsvDataService.getImpactTrackerStats(getThaiProvinceName('Nakhon Sawan'));
+  const dynamicProvinces = Object.keys(PROVINCE_SVG_MAPS);
+  const allProvincesStats: Record<string, Record<number, any>> = {};
+  for (const prov of dynamicProvinces) {
+    allProvincesStats[prov] = await CsvDataService.getImpactTrackerStats(getThaiProvinceName(prov));
+  }
 
   // Calculate Global Stats
   const openChurches = churches.filter(c => c.status?.trim() === OPEN_STATUS);
@@ -80,12 +82,10 @@ export default async function Home() {
   }));
 
   return (
-    <main className="flex flex-col w-full">
-      <Hero stats={stats} provinceStats={provinceStats} />
-      <ImpactTracker data={nakhonSawanStats} />
-      <ExpectationsReality actualData2024={nakhonSawanStats[1]} />
-      <TransformedLives />
-      <ExponentialResults data={nakhonSawanStats[4]} />
-    </main>
+    <HomeClient
+      stats={stats}
+      provinceStats={provinceStats}
+      allProvincesStats={allProvincesStats}
+    />
   );
 }

@@ -12,9 +12,10 @@ import { TimelineStateData } from '@/data/dummyProvinceData';
 
 interface ImpactTrackerProps {
     data?: Record<number, TimelineStateData>;
+    provinceName?: string;
 }
 
-const ImpactTracker = ({ data }: ImpactTrackerProps) => {
+const ImpactTracker = ({ data, provinceName = 'Nakhon Sawan' }: ImpactTrackerProps) => {
     const { ref, isVisible } = useScrollReveal();
     const [activeStep, setActiveStep] = useState(2); // Default to "Today"
     const [selectedDistrictName, setSelectedDistrictName] = useState<string | null>(null);
@@ -26,11 +27,11 @@ const ImpactTracker = ({ data }: ImpactTrackerProps) => {
     const selectedDistrict = currentState.districts.find(d => d.name === selectedDistrictName) || null;
 
     const displayData = {
-        name: "Nakhon Sawan Province",
-        churches: currentState.churches,
-        villages: currentState.villages,
-        joined: currentState.joined,
-        isAggregated: true
+        name: `${provinceName} Province`,
+        churches: selectedDistrict ? selectedDistrict.churches : currentState.churches,
+        villages: selectedDistrict ? selectedDistrict.villages : currentState.villages,
+        joined: selectedDistrict ? selectedDistrict.joined : currentState.joined,
+        isAggregated: !selectedDistrict
     };
 
     return (
@@ -40,7 +41,7 @@ const ImpactTracker = ({ data }: ImpactTrackerProps) => {
                     {/* Left: Timeline */}
                     <div className="w-full lg:w-[40%] text-[#023862]">
                         <div className={`mb-12 reveal-on-scroll fade-up ${isVisible ? 'is-visible' : ''}`}>
-                            <h2 className="text-5xl font-semibold mb-6 text-[#023862] tracking-tighter">Nakhon Sawan</h2>
+                            <h2 className="text-5xl font-semibold mb-6 text-[#023862] tracking-tighter">{provinceName}</h2>
                             <p className="paragraph max-w-2xl text-[#023862]/70 leading-relaxed italic">
                                 &quot;{currentState.description}&quot;
                             </p>
@@ -89,6 +90,7 @@ const ImpactTracker = ({ data }: ImpactTrackerProps) => {
                                 activeDistrict={selectedDistrictName}
                                 onDistrictSelect={(name) => setSelectedDistrictName(name === selectedDistrictName ? null : name)}
                                 customDistrictsData={currentState.districts}
+                                activeProvince={provinceName}
                             />
                         </div>
 

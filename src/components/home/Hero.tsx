@@ -17,11 +17,16 @@ interface HeroProps {
         impactPercentage: number;
     };
     provinceStats?: DistrictStats[];
+    activeProvince?: string | null;
+    onProvinceSelect?: (name: string) => void;
 }
 
-const Hero = ({ stats, provinceStats }: HeroProps) => {
+const Hero = ({ stats, provinceStats, activeProvince, onProvinceSelect }: HeroProps) => {
     const { ref, isVisible } = useScrollReveal(0.05);
-    const [selectedProvince, setSelectedProvince] = useState<string | null>(null);
+    const [localSelectedProvince, setLocalSelectedProvince] = useState<string | null>(null);
+
+    const currentProvince = activeProvince !== undefined ? activeProvince : localSelectedProvince;
+    const handleProvinceSelect = onProvinceSelect || setLocalSelectedProvince;
 
     return (
         <section ref={ref} className="relative w-full bg-[#023865] pt-32 pb-16">
@@ -32,8 +37,8 @@ const Hero = ({ stats, provinceStats }: HeroProps) => {
                     >
                         <ThailandSvgMap 
                             activeStep={2}
-                            activeProvince={selectedProvince}
-                            onProvinceSelect={(name: string) => setSelectedProvince(name)}
+                            activeProvince={currentProvince}
+                            onProvinceSelect={handleProvinceSelect}
                             customProvincesData={provinceStats}
                         />
                     </div>

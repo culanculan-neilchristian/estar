@@ -11,23 +11,7 @@ const OPEN_STATUS = '\u0e40\u0e1b\u0e34\u0e14\u0e2d\u0e22\u0e39\u0e48';
 const NAKHON_SAWAN = '\u0e19\u0e04\u0e23\u0e2a\u0e27\u0e23\u0e23\u0e04\u0e4c';
 const AMPHOE_PREFIX = '\u0e2d\u0e33\u0e40\u0e20\u0e2d';
 
-const NAKHON_SAWAN_DISTRICTS: Record<string, string> = {
-  '\u0e25\u0e32\u0e14\u0e22\u0e32\u0e27': 'Lat Yao',
-  '\u0e15\u0e32\u0e01\u0e1f\u0e49\u0e32': 'Tak Fa',
-  '\u0e44\u0e1e\u0e28\u0e32\u0e25\u0e35': 'Phaisali',
-  '\u0e1a\u0e23\u0e23\u0e1e\u0e15\u0e1e\u0e34\u0e2a\u0e31\u0e22': 'Banphot Phisai',
-  '\u0e0a\u0e38\u0e21\u0e41\u0e2a\u0e07': 'Chum Saeng',
-  '\u0e41\u0e21\u0e48\u0e27\u0e07\u0e01\u0e4c': 'Mae Wong',
-  '\u0e40\u0e01\u0e49\u0e32\u0e40\u0e25\u0e35\u0e49\u0e22\u0e27': 'Kao Liao',
-  '\u0e40\u0e21\u0e37\u0e2d\u0e07\u0e19\u0e04\u0e23\u0e2a\u0e27\u0e23\u0e23\u0e04\u0e4c': 'Mueang Nakhon Sawan',
-  '\u0e42\u0e01\u0e23\u0e01\u0e1e\u0e23\u0e30': 'Krok Phra',
-  '\u0e2b\u0e19\u0e2d\u0e07\u0e1a\u0e31\u0e27': 'Nong Bua',
-  '\u0e41\u0e21\u0e48\u0e40\u0e1b\u0e34\u0e19': 'Mae Poen',
-  '\u0e1e\u0e22\u0e38\u0e2b\u0e30\u0e04\u0e35\u0e23\u0e35': 'Phayuha Khiri',
-  '\u0e17\u0e48\u0e32\u0e15\u0e30\u0e42\u0e01': 'Tha Tako',
-  '\u0e15\u0e32\u0e04\u0e25\u0e35': 'Takhli',
-  '\u0e0a\u0e38\u0e21\u0e15\u0e32\u0e1a\u0e07': 'Chum Ta Bong',
-};
+import { PROVINCE_DISTRICT_MAPPINGS } from '@/data/provinceDistrictMappings';
 
 function normalizeDistrictName(name: string | undefined): string {
   return (name || '').replace(/\s+/g, '').replace(new RegExp(`^${AMPHOE_PREFIX}`), '').trim();
@@ -85,6 +69,7 @@ export class CsvDataService {
 
     const targetEngName = normalizeProvince(provinceThaiName);
     const provinceChurches = churches.filter(c => normalizeProvince(c.province) === targetEngName);
+    const districtMapping = PROVINCE_DISTRICT_MAPPINGS[targetEngName] || {};
 
     const calculatePhaseStats = (maxYear: number | null, label: string, date: string, description: string, bulletPoints: string[]) => {
       const phaseRecords = provinceChurches.filter(c => {
@@ -95,7 +80,7 @@ export class CsvDataService {
 
       const openRecords = phaseRecords.filter(c => c.status?.trim() === OPEN_STATUS);
 
-      const districtStats = Object.entries(NAKHON_SAWAN_DISTRICTS).map(([thaiName, engName]) => {
+      const districtStats = Object.entries(districtMapping).map(([thaiName, engName]) => {
         const distPhaseRecords = phaseRecords.filter(c => normalizeDistrictName(c.amphoe) === thaiName);
         const distOpenRecords = distPhaseRecords.filter(c => c.status?.trim() === OPEN_STATUS);
         const joinedCount = distOpenRecords.reduce((sum, c) => sum + (c.participate || 0), 0);
@@ -130,13 +115,13 @@ export class CsvDataService {
 
     const stats: Record<number, TimelineStateData> = {
       0: calculatePhaseStats(2023, 'The Start', '2024 JANUARY',
-        'Initial foundation phase in Nakhon Sawan.',
+        `Initial foundation phase in ${targetEngName}.`,
         ['Establishing core leadership teams', 'Initial survey of target villages']),
       1: calculatePhaseStats(2024, 'One Year In', '2024 DECEMBER',
-        'A period of significant growth across the target districts.',
+        `A period of significant growth across the target districts in ${targetEngName}.`,
         ['Planted a substantial number of house churches', 'Community programs reaching new followers']),
       2: calculatePhaseStats(2025, 'Today', '2025 JULY',
-        'Sustainable movement building phase.',
+        `Sustainable movement building phase in ${targetEngName}.`,
         ['Transitioning to self-multiplying phase', 'Consistent baptism and training cycles']),
     };
 
@@ -161,7 +146,7 @@ export class CsvDataService {
     };
 
     stats[4] = calculatePhaseStats(null, 'Complete Movement', 'PRESENT',
-      'Total impact across all years in Nakhon Sawan.',
+      `Total impact across all years in ${targetEngName}.`,
       ['Cumulative growth across the region', 'Full network of house churches']);
 
     return stats;

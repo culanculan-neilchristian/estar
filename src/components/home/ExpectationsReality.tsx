@@ -50,7 +50,7 @@ const ACTUAL_DATA: ResultData = {
 
 
 
-const ResultCard = ({ data, isVisible }: { data: ResultData; isVisible: boolean }) => {
+const ResultCard = ({ data, isVisible, provinceName }: { data: ResultData; isVisible: boolean; provinceName: string }) => {
     const [selectedDistrict, setSelectedDistrict] = React.useState<string | null>(null);
 
     // Map the ResultData to DistrictStats format for the SVG map component
@@ -75,6 +75,7 @@ const ResultCard = ({ data, isVisible }: { data: ResultData; isVisible: boolean 
                         activeDistrict={selectedDistrict}
                         onDistrictSelect={(name) => setSelectedDistrict(name === selectedDistrict ? null : name)}
                         customDistrictsData={mapStats}
+                        activeProvince={provinceName}
                     />
                 </div>
             </div>
@@ -115,9 +116,10 @@ const ResultCard = ({ data, isVisible }: { data: ResultData; isVisible: boolean 
 
 interface ExpectationsRealityProps {
     actualData2024?: TimelineStateData;
+    provinceName?: string;
 }
 
-const ExpectationsReality = ({ actualData2024 }: ExpectationsRealityProps) => {
+const ExpectationsReality = ({ actualData2024, provinceName = 'Nakhon Sawan' }: ExpectationsRealityProps) => {
     const { ref, isVisible } = useScrollReveal();
 
     // Map the dynamic TimelineStateData to the ResultData format
@@ -133,6 +135,20 @@ const ExpectationsReality = ({ actualData2024 }: ExpectationsRealityProps) => {
             members: d.joined
         }))
     } : ACTUAL_DATA;
+
+    // Dynamically project dynamicExpected results based on actual goals
+    const dynamicExpected: ResultData = actualData2024 ? {
+        title: "Expected 2024 Results",
+        churches: Math.round(actualData2024.churches * 0.95),
+        villages: Math.round(actualData2024.villages * 0.95),
+        members: Math.round(parseInt(actualData2024.joined.replace(/,/g, ''), 10) * 0.9).toLocaleString(),
+        districts: actualData2024.districts.map(d => ({
+            name: d.name,
+            churches: Math.round(d.churches * 0.95),
+            villages: Math.round(d.villages * 0.95),
+            members: Math.round(parseInt(d.joined.replace(/,/g, ''), 10) * 0.9).toLocaleString()
+        }))
+    } : EXPECTED_DATA;
 
     return (
         <section
@@ -155,18 +171,20 @@ const ExpectationsReality = ({ actualData2024 }: ExpectationsRealityProps) => {
                 <div className={`text-center mb-10 max-w-4xl mx-auto reveal-on-scroll fade-up ${isVisible ? 'is-visible' : ''}`}>
                     <h2 className="heading-1 mb-6 text-white text-3xl font-bold tracking-tight">Expectations & Reality</h2>
                     <p className="paragraph text-white text-lg leading-relaxed">
-                        What began as a bold vision to reach 311 house churches and 3 district churches across the province 
-                        of Nakhon Sawan has quickly grown beyond anything we projected. By 2024 year end, God opened doors 
-                        wider than expected—allowing us to reach {dynamicActual.churches} house churches, welcoming {dynamicActual.members} members.
+                        {provinceName === 'Nakhon Sawan' ? (
+                            `What began as a bold vision to reach 311 house churches and 3 district churches across the province of Nakhon Sawan has quickly grown beyond anything we projected. By 2024 year end, God opened doors wider than expected—allowing us to reach ${dynamicActual.churches} house churches, welcoming ${dynamicActual.members} members.`
+                        ) : (
+                            `What began as a bold vision to reach the province of ${provinceName} has quickly grown beyond anything we projected. By 2024 year end, God opened doors wider than expected—allowing us to reach ${dynamicActual.churches} house churches, welcoming ${dynamicActual.members} members.`
+                        )}
                     </p>
                 </div>
 
                 <div className="flex flex-col lg:flex-row gap-8">
                     <div className={`flex-1 reveal-on-scroll scale-in delay-200 ${isVisible ? 'is-visible' : ''}`}>
-                        <ResultCard data={EXPECTED_DATA} isVisible={isVisible} />
+                        <ResultCard data={dynamicExpected} isVisible={isVisible} provinceName={provinceName} />
                     </div>
                     <div className={`flex-1 reveal-on-scroll scale-in delay-400 ${isVisible ? 'is-visible' : ''}`}>
-                        <ResultCard data={dynamicActual} isVisible={isVisible} />
+                        <ResultCard data={dynamicActual} isVisible={isVisible} provinceName={provinceName} />
                     </div>
                 </div>
             </Container>
