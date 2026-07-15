@@ -42,18 +42,25 @@ export class CsvDataService {
   }
 
   /**
-   * Reads church data from the source CSV file. If the server cannot read
-   * the file, use the latest parsed admin upload to avoid serving zero data.
+   * Reads church data from the admin dashboard first. If the admin has no data
+   * (e.g. deleted), use the local static CSV file as a fallback.
    */
   static async getAllChurches(): Promise<ChurchData[]> {
     try {
+      // 1. Try to get the latest upload from the admin dashboard FIRST
+      const uploadedChurches = await this.getLatestUploadedChurches();
+      if (uploadedChurches && uploadedChurches.length > 0) {
+        return uploadedChurches;
+      }
+      
+      // 2. If no admin upload exists (e.g. deleted), fallback to the local file
       const csvString = await readFile(CHURCH_CSV_FILE_PATH, 'utf8');
       const churches = parseChurchCsv(csvString);
-      console.log(`[CSV-DATA] Loaded ${churches.length} churches from ${CHURCH_CSV_FILE_PATH}`);
+      console.log(`[CSV-DATA] Admin data empty. Loaded ${churches.length} churches from fallback file ${CHURCH_CSV_FILE_PATH}`);
       return churches;
     } catch (error) {
-      console.error(`[CSV-DATA] Error reading ${CHURCH_CSV_FILE_PATH}:`, error);
-      return this.getLatestUploadedChurches();
+      console.error(`[CSV-DATA] Error reading fallback file ${CHURCH_CSV_FILE_PATH}:`, error);
+      return [];
     }
   }
 
@@ -69,6 +76,13 @@ export class CsvDataService {
 
     const targetEngName = normalizeProvince(provinceThaiName);
     const provinceChurches = churches.filter(c => normalizeProvince(c.province) === targetEngName);
+
+    // Fallback to the original dummy data if the CSV is completely empty for Nakhon Sawan
+    if (provinceChurches.length === 0 && targetEngName === 'Nakhon Sawan') {
+      const { NAKHON_SAWAN_DUMMY_DATA } = await import('@/data/dummyProvinceData');
+      return NAKHON_SAWAN_DUMMY_DATA;
+    }
+
     const districtMapping = PROVINCE_DISTRICT_MAPPINGS[targetEngName] || {};
 
     const calculatePhaseStats = (maxYear: number | null, label: string, date: string, description: string, bulletPoints: string[]) => {
