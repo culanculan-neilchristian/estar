@@ -17,6 +17,8 @@ function normalizeDistrictName(name: string | undefined): string {
   return (name || '').replace(/\s+/g, '').replace(new RegExp(`^${AMPHOE_PREFIX}`), '').trim();
 }
 
+import { cache } from 'react';
+
 export class CsvDataService {
   private static async getLatestUploadedChurches(): Promise<ChurchData[]> {
     try {
@@ -44,11 +46,13 @@ export class CsvDataService {
   /**
    * Reads church data from the admin dashboard first. If the admin has no data
    * (e.g. deleted), use the local static CSV file as a fallback.
+   * Wrapped in React cache() to prevent 77 redundant DB hits per page load,
+   * while ensuring it instantly clears on the next page refresh.
    */
-  static async getAllChurches(): Promise<ChurchData[]> {
+  static getAllChurches = cache(async (): Promise<ChurchData[]> => {
     try {
       // 1. Try to get the latest upload from the admin dashboard FIRST
-      const uploadedChurches = await this.getLatestUploadedChurches();
+      const uploadedChurches = await CsvDataService.getLatestUploadedChurches();
       if (uploadedChurches && uploadedChurches.length > 0) {
         return uploadedChurches;
       }
@@ -62,7 +66,7 @@ export class CsvDataService {
       console.error(`[CSV-DATA] Error reading fallback file ${CHURCH_CSV_FILE_PATH}:`, error);
       return [];
     }
-  }
+  });
 
   static getImpactTrackerStats(provinceThaiName: string = NAKHON_SAWAN) {
     return this.calculateImpactTrackerStats(provinceThaiName);

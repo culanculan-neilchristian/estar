@@ -49,6 +49,18 @@ body {
   .stat-label {
     @apply text-[9px] font-bold text-white/40 tracking-[0.1em] uppercase leading-tight line-clamp-2;
   }
+
+  .btn-primary {
+    @apply rounded-[4px] bg-[#2274b4] hover:bg-[#1a5b8e] px-6 py-3 text-sm font-semibold text-white transition-colors text-center inline-block;
+  }
+
+  .btn-secondary {
+    @apply rounded-[4px] bg-[#1e2a4a] hover:bg-[#151f38] px-6 py-3 text-sm font-semibold text-white transition-colors text-center inline-block;
+  }
+
+  .section-title {
+    @apply text-3xl md:text-5xl font-bold text-[#091f3a] tracking-tight mb-4;
+  }
 }
 
 /* Scroll Reveal Animations - Updated for standard CSS nesting */
