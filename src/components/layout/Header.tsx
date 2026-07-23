@@ -1,15 +1,32 @@
+'use client';
+
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import Container from './Container';
 import PrintButton from './PrintButton';
 
 const Header = () => {
+    const pathname = usePathname();
+    const isImpactPage = pathname?.startsWith('/impact');
     return (
         <header className="fixed top-0 left-0 w-full z-50 bg-[#002e53cc] border-b border-white/10 uppercase">
             <Container className="py-4 flex items-center justify-between">
-                <Link href="/" className="inline-block shrink-0 font-bold text-white text-xl uppercase tracking-wider">
-                    Adventurer Foundation
+                <Link href="/" className="inline-block shrink-0">
+                    {isImpactPage ? (
+                        <span className="font-bold text-white text-xl uppercase tracking-wider">Adventurer Foundation</span>
+                    ) : (
+                        <Image
+                            src="/logo.png"
+                            alt="eStar Global"
+                            width={116}
+                            height={65}
+                            unoptimized
+                            priority
+                            className="h-10 w-auto"
+                        />
+                    )}
                 </Link>
 
                 <div className="flex items-center gap-8">
