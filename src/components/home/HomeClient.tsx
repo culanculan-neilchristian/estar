@@ -1,11 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
-import Hero from '@/components/home/Hero';
-import ImpactTracker from '@/components/home/ImpactTracker';
-import ExpectationsReality from '@/components/home/ExpectationsReality';
-import TransformedLives from '@/components/home/TransformedLives';
-import ExponentialResults from '@/components/home/ExponentialResults';
+import HomeHero from '@/components/home/HomeHero';
+import HomeIntro from '@/components/home/HomeIntro';
+import HomeDonationImpact from '@/components/home/HomeDonationImpact';
+import HomeMovement from '@/components/home/HomeMovement';
+import HomeStories from '@/components/home/HomeStories';
+import HomeRoadmap from '@/components/home/HomeRoadmap';
+import HomeCta from '@/components/home/HomeCta';
 import { TimelineStateData } from '@/data/dummyProvinceData';
 
 interface HomeClientProps {
@@ -21,28 +23,18 @@ interface HomeClientProps {
 }
 
 export default function HomeClient({ stats, provinceStats, allProvincesStats }: HomeClientProps) {
+  // We keep the state in case we want to re-integrate province specific stats later
   const [selectedProvince, setSelectedProvince] = useState<string>('Nakhon Sawan');
 
-  // Lookup the timeline stats for the active province (default to Nakhon Sawan if not found)
-  const activeStats = allProvincesStats[selectedProvince] || allProvincesStats['Nakhon Sawan'];
-
   return (
-    <main className="flex flex-col w-full">
-      <Hero 
-        stats={stats} 
-        provinceStats={provinceStats} 
-        activeProvince={selectedProvince}
-        onProvinceSelect={(name) => {
-          // Switch the active province only if we have compiled tracker data for it
-          if (allProvincesStats[name]) {
-            setSelectedProvince(name);
-          }
-        }}
-      />
-      <ImpactTracker data={activeStats} provinceName={selectedProvince} />
-      <ExpectationsReality actualData2024={activeStats[1]} provinceName={selectedProvince} />
-      <TransformedLives />
-      <ExponentialResults data={activeStats[4]} provinceName={selectedProvince} />
+    <main className="flex flex-col w-full bg-white">
+      <HomeHero />
+      <HomeIntro />
+      <HomeDonationImpact />
+      <HomeMovement stats={stats} provinceStats={provinceStats} />
+      <HomeStories />
+      <HomeRoadmap />
+      <HomeCta />
     </main>
   );
 }

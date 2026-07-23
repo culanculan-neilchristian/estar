@@ -1,15 +1,14 @@
-import HomeClient from '@/components/home/HomeClient';
+import ImpactClient from '@/components/impact/ImpactClient';
 import { CsvDataService } from '@/services/csv-data-service';
 import { DistrictStats } from '@/data/dummyProvinceData';
 import { normalizeProvince, getThaiProvinceName } from '@/utils/province-utils';
-
 import { PROVINCE_SVG_MAPS } from '@/data/provinceDistrictPaths';
 
 const OPEN_STATUS = '\u0e40\u0e1b\u0e34\u0e14\u0e2d\u0e22\u0e39\u0e48';
 
 export const dynamic = 'force-dynamic';
 
-export default async function Home() {
+export default async function ImpactPage() {
   const churches = await CsvDataService.getAllChurches();
   const dynamicProvinces = Object.keys(PROVINCE_SVG_MAPS);
   const allProvincesStats: Record<string, Record<number, any>> = {};
@@ -84,7 +83,7 @@ export default async function Home() {
   }));
 
   return (
-    <HomeClient
+    <ImpactClient
       stats={stats}
       provinceStats={provinceStats}
       allProvincesStats={allProvincesStats}
