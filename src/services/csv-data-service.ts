@@ -147,7 +147,7 @@ export class CsvDataService {
     stats[3] = {
       ...today,
       label: 'Next Year Expectations',
-      date: '2026 DECEMBER',
+      date: '2027 DECEMBER',
       churches: Math.floor(today.churches * 1.2),
       villages: Math.floor(today.villages * 1.2),
       joined: Math.floor(parseInt(today.joined.replace(/,/g, ''), 10) * 1.2).toLocaleString(),
