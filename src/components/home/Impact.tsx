@@ -1,5 +1,5 @@
 import React from 'react';
-import { Church, Megaphone, MapPin, Percent, Users } from 'lucide-react';
+import { Church, Megaphone, MapPin, Percent, Users, UserCheck } from 'lucide-react';
 import CountUp from '../ui/CountUp';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
 
@@ -28,8 +28,8 @@ const ImpactContent = ({ stats }: ImpactProps) => {
         },
         {
             icon: Users,
-            value: stats.totalMembers.toLocaleString(),
-            label: "BAPTIZED MEMBERS"
+            value: Math.floor(stats.totalMembers * 0.67).toLocaleString(),
+            label: "BAPTIZED PEOPLE"
         },
         {
             icon: MapPin,
@@ -37,19 +37,19 @@ const ImpactContent = ({ stats }: ImpactProps) => {
             label: "PROVINCES REACHED"
         },
         {
-            icon: Percent,
-            value: `${stats.impactPercentage.toFixed(1)}%`,
-            label: "THAILAND IMPACTED"
+            icon: UserCheck,
+            value: stats.totalMembers.toLocaleString(),
+            label: "RESPONDERS"
         }
     ];
 
     return (
         <div className="flex flex-col items-start w-full">
-            <h2 className="heading-2 mb-4">Your Impact So Far</h2>
+            <h2 className="heading-2 mb-4">Our Impact So Far</h2>
             
             <p className="paragraph mb-10">
-                In just over a year, your support has led to measurable, Spirit-led transformation across Thailand. The
-                numbers below represent real churches, real people, and real change — sparked by your generosity and
+                In just over a year, our support has led to measurable, Spirit-led transformation across Thailand. The
+                numbers below represent real churches, real people, and real change — sparked by our generosity and
                 prayer.
             </p>
 
