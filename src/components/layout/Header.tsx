@@ -15,7 +15,7 @@ const Header = () => {
             <Container className="py-4 flex items-center justify-between">
                 <Link href="/" className="inline-block shrink-0">
                     {isImpactPage ? (
-                        <span className="font-bold text-white text-xl uppercase tracking-wider">Adventurer Foundation</span>
+                        <span className="font-bold text-white text-xl uppercase tracking-wider">eStar Thailand & AFT</span>
                     ) : (
                         <Image
                             src="/logo.png"
@@ -46,7 +46,7 @@ const Header = () => {
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
                                 </button>
                                 <div className="absolute top-full left-0 mt-0 w-56 bg-white text-[#091f3a] shadow-xl rounded-md overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                                    <Link href="/impact" className="block px-4 py-3 text-sm hover:bg-gray-100 uppercase font-medium border-b border-gray-100">Adventurer Foundation</Link>
+                                    <Link href="/impact" className="block px-4 py-3 text-sm hover:bg-gray-100 uppercase font-medium border-b border-gray-100">eStar Thailand & AFT</Link>
                                 </div>
                             </li>
                             <li>

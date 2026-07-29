@@ -28,7 +28,7 @@ export const NAKHON_SAWAN_DUMMY_DATA: Record<number, TimelineStateData> = {
     villages: 0,
     joined: "0",
     baptized: "0",
-    description: "Aimed to reach 311 house churches and 3 district churches in 3 districts in the province of Nakhon Sawan. Throughout 2024, we have reached a total of 325 house churches. To date, we have reached a total of 361 village churches, including 3 district churches.",
+    description: "Aimed to reach 311 house churches and 3 district churches in 3 districts in the province of Nakhon Sawan. Throughout 2024, we have reached a total of 325 house churches. To date, we have reached a total of 124 village churches, including 3 district churches.",
     bulletPoints: [
       "Targeted 3 districts in Nakhon Sawan",
       "Projected 311 village house churches"
@@ -42,13 +42,13 @@ export const NAKHON_SAWAN_DUMMY_DATA: Record<number, TimelineStateData> = {
   1: { // One Year In
     label: 'One Year In',
     date: '2024 DECEMBER',
-    churches: 325,
+    churches: 100,
     villages: 314,
     joined: "3,782",
     baptized: "2,144",
     description: "By December 2024, we witnessed explosive growth. With over 325 house churches planted, we reached over 2,000 new believers. The leadership training movements matured significantly, exceeding our 2026 goals two years earlier than projected.",
     bulletPoints: [
-      "Planted 325 house churches",
+      "Planted 100 house churches",
       "Reached over 2,000 new believers",
       "Exceeded expectations by completing 2026 goals two years early"
     ],
@@ -60,26 +60,26 @@ export const NAKHON_SAWAN_DUMMY_DATA: Record<number, TimelineStateData> = {
   },
   2: { // Today
     label: 'Today',
-    date: '2025 JULY',
-    churches: 361,
+    date: '2026 JULY',
+    churches: 124,
     villages: 350,
     joined: "4,923",
     baptized: "3,291",
-    description: "As of July 2025, we continue to see sustainable acceleration. All 3 target districts are now fully integrated into the planting movement. We are transitioning to a self-multiplying phase, with 361 village house churches currently active.",
+    description: "As of July 2026, we continue to see sustainable acceleration. All 3 target districts are now fully integrated into the planting movement. We are transitioning to a self-multiplying phase, with 124 village house churches currently active.",
     bulletPoints: [
-      "To date, we have reached a total of 361 village churches",
+      "To date, we have reached a total of 124 village churches",
       "These includes 3 district churches, one per district",
       "Reached over 3,000 new believers"
     ],
     districts: [
-      { id: "lat-yao", name: "Lat Yao", churches: 142, villages: 135, joined: "1,882", baptized: "1,357", coordinates: [99.7891, 15.7516] },
-      { id: "tak-fa", name: "Tak Fa", churches: 119, villages: 115, joined: "1,633", baptized: "1,074", coordinates: [100.4851, 15.3400] },
-      { id: "khaisali", name: "Khaisali", churches: 100, villages: 100, joined: "1,408", baptized: "860", coordinates: [100.6500, 15.5800] }
+      { id: "lat-yao", name: "Lat Yao", churches: 45, villages: 135, joined: "1,882", baptized: "1,357", coordinates: [99.7891, 15.7516] },
+      { id: "tak-fa", name: "Tak Fa", churches: 42, villages: 115, joined: "1,633", baptized: "1,074", coordinates: [100.4851, 15.3400] },
+      { id: "khaisali", name: "Khaisali", churches: 37, villages: 100, joined: "1,408", baptized: "860", coordinates: [100.6500, 15.5800] }
     ]
   },
   3: { // Next Year Expectations
     label: 'Next Year Expectations',
-    date: '2026 DECEMBER',
+    date: '2027 DECEMBER',
     churches: 385,
     villages: 385,
     joined: "7,000",

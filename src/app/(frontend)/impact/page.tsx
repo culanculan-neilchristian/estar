@@ -23,7 +23,8 @@ export default async function ImpactPage() {
   const totalProvincesCount = [...new Set(churches.map(c => c.province?.trim()).filter(Boolean))].length;
 
   const totalVillagesCount = churches.reduce((sum, c) => sum + (c.village || 0), 0);
-  const totalMembers = openChurches.reduce((sum, c) => sum + (c.participate || 0), 0);
+  const totalResponders = openChurches.reduce((sum, c) => sum + (c.participate || 0), 0);
+  const totalBaptized = Math.floor(totalResponders * 0.67);
 
   // Impact percentage based on the 84k villages mentioned in the text
   const impactPercentage = totalVillagesCount > 0 ? (totalVillagesCount / 84000) * 100 : 0;
@@ -32,7 +33,9 @@ export default async function ImpactPage() {
     totalChurches,
     totalProvinces: totalProvincesCount,
     totalVillages: totalVillagesCount,
-    totalMembers,
+    totalMembers: totalResponders,
+    totalResponders,
+    totalBaptized,
     impactPercentage,
   };
 

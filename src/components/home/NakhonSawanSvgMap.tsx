@@ -31,7 +31,16 @@ const NakhonSawanSvgMap: React.FC<NakhonSawanSvgMapProps> = ({
         setMousePos({ x, y });
     };
 
-    const svgData = PROVINCE_SVG_MAPS[activeProvince] || PROVINCE_SVG_MAPS['Nakhon Sawan'];
+    const svgData = PROVINCE_SVG_MAPS[activeProvince];
+    
+    if (!svgData) {
+        return (
+            <div className="w-full h-full min-h-[400px] flex flex-col items-center justify-center bg-[#023862]/5 rounded-3xl p-8 border-2 border-dashed border-[#023862]/20">
+                <p className="text-[#023862] text-xl font-bold mb-2 uppercase tracking-wide">Not prepared for this demo</p>
+                <p className="text-[#023862]/60 text-center text-sm max-w-xs leading-relaxed">Detailed district mapping for {activeProvince} is not available in the current prototype.</p>
+            </div>
+        );
+    }
 
     const hoveredDistrict = svgData.find(d => d.id === hoveredId);
     const activeDistrictData = svgData.find(d => d.name === activeDistrict);

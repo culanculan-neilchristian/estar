@@ -50,17 +50,17 @@ const Hero = ({ stats, provinceStats, activeProvince, onProvinceSelect }: HeroPr
                     <div className="flex flex-col items-start gap-4">
                         <span className={`eyebrow text-white reveal-on-scroll fade-up ${isVisible ? 'is-visible' : ''}`}>ETERNAL IMPACT IN THAILAND</span>
                         <h1 className={`heading-1 text-white reveal-on-scroll fade-up delay-100 ${isVisible ? 'is-visible' : ''}`}>
-                            Adventurer Foundation
+                            eStar Thailand & AFT
                         </h1>
                         <div className="flex flex-col gap-5">
                             <p className={`paragraph text-white reveal-on-scroll fade-up delay-200 ${isVisible ? 'is-visible' : ''}`}>
-                                Thailand is home to over 84,000 villages, but {(100 - stats.impactPercentage).toFixed(1)}% of them had no Gospel presence. Because of your
-                                giving, that is changing — faster than we expected. Entire districts are being reached, new believers are 
+                                Thailand is home to over 84,000 villages, but {(100 - stats.impactPercentage).toFixed(1)}% of them had no Gospel presence. Because of our
+                                shared support, that is changing — faster than we expected. Entire districts are being reached, new believers are 
                                 being baptized, and the movement is accelerating.
                             </p>
                             <p className={`paragraph text-white reveal-on-scroll fade-up delay-300 ${isVisible ? 'is-visible' : ''}`}>
-                                In partnership with eStar and the Association of Free Churches in Thailand (AFT), your generosity through
-                                the Adventurer Foundation is helping fulfill a God-sized vision:
+                                In partnership with eStar and the Association of Free Churches in Thailand (AFT), our generosity through
+                                eStar Thailand & AFT is helping fulfill a God-sized vision:
                             </p>
                             <blockquote className={`quote-box text-white border-white/20 reveal-on-scroll fade-up delay-400 ${isVisible ? 'is-visible' : ''}`}>
                                 A church in every village. A disciple in every home.
