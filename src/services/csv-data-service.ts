@@ -132,13 +132,13 @@ export class CsvDataService {
     };
 
     const stats: Record<number, TimelineStateData> = {
-      0: calculatePhaseStats(2023, 'The Start', '2024 JANUARY',
+      0: calculatePhaseStats(2024, 'The Start', '2024 JANUARY',
         `Initial foundation phase in ${targetEngName}.`,
         ['Establishing core leadership teams', 'Initial survey of target villages']),
-      1: calculatePhaseStats(2024, 'One Year In', '2024 DECEMBER',
+      1: calculatePhaseStats(2025, 'One Year In', '2025 DECEMBER',
         `A period of significant growth across the target districts in ${targetEngName}.`,
         ['Planted a substantial number of house churches', 'Community programs reaching new followers']),
-      2: calculatePhaseStats(2025, 'Today', '2025 JULY',
+      2: calculatePhaseStats(2026, 'Today', '2026 JULY',
         `Sustainable movement building phase in ${targetEngName}.`,
         ['Transitioning to self-multiplying phase', 'Consistent baptism and training cycles']),
     };
