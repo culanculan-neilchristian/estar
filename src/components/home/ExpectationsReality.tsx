@@ -89,7 +89,7 @@ const ResultCard = ({ data, isVisible, provinceName }: { data: ResultData; isVis
                 <span className="text-2xl font-semibold text-[#023862]">
                     {isVisible ? <CountUp end={data.churches} duration={1500} /> : '0'}
                 </span>
-                <span className="text-[9px] font-semibold text-[#023862]/70 uppercase tracking-widest mt-1">CHURCHES</span>
+                <span className="text-[9px] font-semibold text-[#023862]/70 uppercase tracking-widest mt-1">CHURCHES PLANTED</span>
             </div>
             <div className="flex flex-col items-center">
                 <div className="w-14 h-14 bg-white border-2 border-[#2E7AB8] rounded-full flex items-center justify-center mb-3">
@@ -98,7 +98,7 @@ const ResultCard = ({ data, isVisible, provinceName }: { data: ResultData; isVis
                 <span className="text-2xl font-semibold text-[#023862]">
                     {isVisible ? <CountUp end={data.villages} duration={1500} /> : '0'}
                 </span>
-                <span className="text-[9px] font-semibold text-[#023862]/70 uppercase tracking-widest mt-1">VILLAGES</span>
+                <span className="text-[9px] font-semibold text-[#023862]/70 uppercase tracking-widest mt-1">VILLAGES REACHED</span>
             </div>
             <div className="flex flex-col items-center">
                 <div className="w-14 h-14 bg-white border-2 border-[#2E7AB8] rounded-full flex items-center justify-center mb-3">
@@ -107,7 +107,7 @@ const ResultCard = ({ data, isVisible, provinceName }: { data: ResultData; isVis
                 <span className="text-2xl font-semibold text-[#023862]">
                     {isVisible ? <CountUp end={parseFloat(data.members.replace(/,/g, ''))} duration={1500} /> : '0'}
                 </span>
-                <span className="text-[9px] font-semibold text-[#023862]/70 uppercase tracking-widest mt-1">BAPTIZED</span>
+                <span className="text-[9px] font-semibold text-[#023862]/70 uppercase tracking-widest mt-1">BAPTIZED PEOPLE</span>
             </div>
             </div>
         </div>

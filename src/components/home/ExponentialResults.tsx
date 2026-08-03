@@ -21,9 +21,9 @@ const ExponentialResults = ({ data, provinceName = 'Nakhon Sawan' }: Exponential
     const districts = timelineData?.districts || [];
 
     const totals = [
-        { icon: Church, value: timelineData?.churches.toString() || "0", label: "CHURCHES" },
-        { icon: Megaphone, value: timelineData?.villages.toString() || "0", label: "VILLAGES" },
-        { icon: UserRound, value: timelineData?.joined || "0", label: "MEMBERS" }
+        { icon: Church, value: timelineData?.churches.toString() || "0", label: "CHURCHES PLANTED" },
+        { icon: Megaphone, value: timelineData?.villages.toString() || "0", label: "VILLAGES REACHED" },
+        { icon: UserRound, value: timelineData?.joined || "0", label: "BAPTIZED PEOPLE" }
     ];
 
     return (
