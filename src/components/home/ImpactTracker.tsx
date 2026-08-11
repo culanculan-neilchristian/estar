@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Church, Megaphone, UserRound } from 'lucide-react';
+import { Church, Megaphone, UserRound, UserCheck } from 'lucide-react';
 import Container from '@/components/layout/Container';
 import CountUp from '../ui/CountUp';
 import { NAKHON_SAWAN_DUMMY_DATA } from '@/data/dummyProvinceData';
@@ -31,6 +31,7 @@ const ImpactTracker = ({ data, provinceName = 'Nakhon Sawan' }: ImpactTrackerPro
         churches: selectedDistrict ? selectedDistrict.churches : currentState.churches,
         villages: selectedDistrict ? selectedDistrict.villages : currentState.villages,
         joined: selectedDistrict ? selectedDistrict.joined : currentState.joined,
+        baptized: selectedDistrict ? selectedDistrict.baptized : currentState.baptized,
         isAggregated: !selectedDistrict
     };
 
@@ -95,11 +96,12 @@ const ImpactTracker = ({ data, provinceName = 'Nakhon Sawan' }: ImpactTrackerPro
                         </div>
 
                         {/* Summary Stats Overview (Updates based on selection) */}
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 items-start">
 
                             {[
                                 { icon: Church, label: "CHURCHES PLANTED", value: displayData.churches },
                                 { icon: Megaphone, label: "VILLAGES REACHED", value: displayData.villages },
+                                { icon: UserCheck, label: "RESPONDERS", value: Math.max(0, parseFloat(displayData.joined.toString().replace(/,/g, '')) - 20) },
                                 { icon: UserRound, label: "BAPTIZED PEOPLE", value: displayData.joined }
                             ].map((stat, i) => (
                                 <div key={i} className={`flex flex-col items-center text-center group cursor-default reveal-on-scroll fade-up ${isVisible ? 'is-visible' : ''}`} style={{ transitionDelay: `${500 + (i * 100)}ms` }}>
@@ -113,7 +115,7 @@ const ImpactTracker = ({ data, provinceName = 'Nakhon Sawan' }: ImpactTrackerPro
                                             "0"
                                         )}
                                     </span>
-                                    <span className="text-[10px] font-semibold text-[#023862]/70 uppercase tracking-[0.2em]">{stat.label}</span>
+                                    <span className="text-[10px] font-semibold text-[#023862]/70 uppercase tracking-[0.2em] whitespace-nowrap">{stat.label}</span>
                                 </div>
                             ))}
                         </div>
