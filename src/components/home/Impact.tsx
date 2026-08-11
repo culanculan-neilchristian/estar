@@ -77,7 +77,7 @@ const ImpactContent = ({ stats }: ImpactProps) => {
                                     <span>0{suffix}</span>
                                 )}
                             </span>
-                            <span className="stat-label">{stat.label}</span>
+                            <span className="stat-label whitespace-nowrap">{stat.label}</span>
                         </div>
                     );
                 })}

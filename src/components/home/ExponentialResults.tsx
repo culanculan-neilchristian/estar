@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Church, Megaphone, UserRound } from 'lucide-react';
+import { Church, Megaphone, UserRound, UserCheck } from 'lucide-react';
 import Container from '@/components/layout/Container';
 import CountUp from '../ui/CountUp';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
@@ -23,6 +23,7 @@ const ExponentialResults = ({ data, provinceName = 'Nakhon Sawan' }: Exponential
     const totals = [
         { icon: Church, value: timelineData?.churches.toString() || "0", label: "CHURCHES PLANTED" },
         { icon: Megaphone, value: timelineData?.villages.toString() || "0", label: "VILLAGES REACHED" },
+        { icon: UserCheck, value: Math.max(0, parseFloat((timelineData?.joined || "0").replace(/,/g, '')) - 20), label: "RESPONDERS" },
         { icon: UserRound, value: timelineData?.joined || "0", label: "BAPTIZED PEOPLE" }
     ];
 
@@ -64,7 +65,7 @@ const ExponentialResults = ({ data, provinceName = 'Nakhon Sawan' }: Exponential
                             </div>
 
                             {/* Totals Grid */}
-                            <div className="grid grid-cols-3 gap-8">
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 items-start">
                                 {totals.map((stat, i) => (
                                     <div 
                                         key={i} 
@@ -76,12 +77,12 @@ const ExponentialResults = ({ data, provinceName = 'Nakhon Sawan' }: Exponential
                                         </div>
                                         <span className="text-2xl font-semibold text-[#023862]">
                                             {isVisible ? (
-                                                <CountUp end={parseFloat(stat.value.replace(/,/g, ''))} duration={1500} />
+                                                <CountUp end={parseFloat(stat.value.toString().replace(/,/g, ''))} duration={1500} />
                                             ) : (
                                                 "0"
                                             )}
                                         </span>
-                                        <span className="text-[9px] font-semibold text-[#023862]/70 uppercase tracking-[0.2em] mt-1">{stat.label}</span>
+                                        <span className="text-[9px] font-semibold text-[#023862]/70 uppercase tracking-[0.2em] mt-1 whitespace-nowrap">{stat.label}</span>
                                     </div>
                                 ))}
                             </div>

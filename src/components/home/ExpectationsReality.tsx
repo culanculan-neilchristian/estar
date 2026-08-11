@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { Church, Megaphone, UserRound } from 'lucide-react';
+import { Church, Megaphone, UserRound, UserCheck } from 'lucide-react';
 import Container from '@/components/layout/Container';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
 import NakhonSawanSvgMap from './NakhonSawanSvgMap';
@@ -14,6 +14,7 @@ interface DistrictResult {
     churches: number;
     villages: number;
     members: string;
+    baptized?: string;
 }
 
 interface ResultData {
@@ -21,6 +22,7 @@ interface ResultData {
     churches: number;
     villages: number;
     members: string;
+    baptized?: string;
     districts: DistrictResult[];
 }
 
@@ -29,10 +31,11 @@ const EXPECTED_DATA: ResultData = {
     churches: 311,
     villages: 311,
     members: "3,200",
+    baptized: "2,144",
     districts: [
-        { name: "Lat Yao", churches: 121, villages: 121, members: "1,250" },
-        { name: "Tak Fa", churches: 102, villages: 102, members: "1,050" },
-        { name: "Khaisali", churches: 88, villages: 88, members: "900" }
+        { name: "Lat Yao", churches: 121, villages: 121, members: "1,250", baptized: "837" },
+        { name: "Tak Fa", churches: 102, villages: 102, members: "1,050", baptized: "703" },
+        { name: "Khaisali", churches: 88, villages: 88, members: "900", baptized: "603" }
     ]
 };
 
@@ -41,10 +44,11 @@ const ACTUAL_DATA: ResultData = {
     churches: 325,
     villages: 314, // Roughly based on church count
     members: "3,782",
+    baptized: "2,144",
     districts: [
-        { name: "Lat Yao", churches: 126, villages: 121, members: "1,489" },
-        { name: "Tak Fa", churches: 107, villages: 104, members: "1,268" },
-        { name: "Khaisali", churches: 92, villages: 89, members: "1,025" }
+        { name: "Lat Yao", churches: 126, villages: 121, members: "1,489", baptized: "855" },
+        { name: "Tak Fa", churches: 107, villages: 104, members: "1,268", baptized: "717" },
+        { name: "Khaisali", churches: 92, villages: 89, members: "1,025", baptized: "572" }
     ]
 };
 
@@ -60,7 +64,7 @@ const ResultCard = ({ data, isVisible, provinceName }: { data: ResultData; isVis
         churches: d.churches,
         villages: d.villages,
         joined: d.members,
-        baptized: "0",
+        baptized: d.baptized || "0",
         coordinates: [0, 0] as [number, number]
     }));
 
@@ -81,7 +85,7 @@ const ResultCard = ({ data, isVisible, provinceName }: { data: ResultData; isVis
             </div>
 
         {/* Stats Row */}
-        <div className="grid grid-cols-3 gap-4 pt-10 border-t border-[#023862]/10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-10 border-t border-[#023862]/10 items-start">
             <div className="flex flex-col items-center">
                 <div className="w-14 h-14 bg-white border-2 border-[#2E7AB8] rounded-full flex items-center justify-center mb-3">
                     <Church className="w-6 h-6 text-[#2E7AB8]" />
@@ -89,7 +93,7 @@ const ResultCard = ({ data, isVisible, provinceName }: { data: ResultData; isVis
                 <span className="text-2xl font-semibold text-[#023862]">
                     {isVisible ? <CountUp end={data.churches} duration={1500} /> : '0'}
                 </span>
-                <span className="text-[9px] font-semibold text-[#023862]/70 uppercase tracking-widest mt-1">CHURCHES PLANTED</span>
+                <span className="text-[9px] font-semibold text-[#023862]/70 uppercase tracking-widest mt-1 text-center whitespace-nowrap">CHURCHES PLANTED</span>
             </div>
             <div className="flex flex-col items-center">
                 <div className="w-14 h-14 bg-white border-2 border-[#2E7AB8] rounded-full flex items-center justify-center mb-3">
@@ -98,7 +102,16 @@ const ResultCard = ({ data, isVisible, provinceName }: { data: ResultData; isVis
                 <span className="text-2xl font-semibold text-[#023862]">
                     {isVisible ? <CountUp end={data.villages} duration={1500} /> : '0'}
                 </span>
-                <span className="text-[9px] font-semibold text-[#023862]/70 uppercase tracking-widest mt-1">VILLAGES REACHED</span>
+                <span className="text-[9px] font-semibold text-[#023862]/70 uppercase tracking-widest mt-1 text-center whitespace-nowrap">VILLAGES REACHED</span>
+            </div>
+            <div className="flex flex-col items-center">
+                <div className="w-14 h-14 bg-white border-2 border-[#2E7AB8] rounded-full flex items-center justify-center mb-3">
+                    <UserCheck className="w-6 h-6 text-[#2E7AB8]" />
+                </div>
+                <span className="text-2xl font-semibold text-[#023862]">
+                    {isVisible ? <CountUp end={Math.max(0, parseFloat(data.members.replace(/,/g, '')) - 20)} duration={1500} /> : '0'}
+                </span>
+                <span className="text-[9px] font-semibold text-[#023862]/70 uppercase tracking-widest mt-1 text-center whitespace-nowrap">RESPONDERS</span>
             </div>
             <div className="flex flex-col items-center">
                 <div className="w-14 h-14 bg-white border-2 border-[#2E7AB8] rounded-full flex items-center justify-center mb-3">
@@ -107,7 +120,7 @@ const ResultCard = ({ data, isVisible, provinceName }: { data: ResultData; isVis
                 <span className="text-2xl font-semibold text-[#023862]">
                     {isVisible ? <CountUp end={parseFloat(data.members.replace(/,/g, ''))} duration={1500} /> : '0'}
                 </span>
-                <span className="text-[9px] font-semibold text-[#023862]/70 uppercase tracking-widest mt-1">BAPTIZED PEOPLE</span>
+                <span className="text-[9px] font-semibold text-[#023862]/70 uppercase tracking-widest mt-1 text-center whitespace-nowrap">BAPTIZED PEOPLE</span>
             </div>
             </div>
         </div>
@@ -128,11 +141,13 @@ const ExpectationsReality = ({ actualData2024, provinceName = 'Nakhon Sawan' }: 
         churches: actualData2024.churches,
         villages: actualData2024.villages,
         members: actualData2024.joined,
+        baptized: actualData2024.baptized,
         districts: actualData2024.districts.map(d => ({
             name: d.name,
             churches: d.churches,
             villages: d.villages,
-            members: d.joined
+            members: d.joined,
+            baptized: d.baptized
         }))
     } : ACTUAL_DATA;
 
@@ -142,11 +157,13 @@ const ExpectationsReality = ({ actualData2024, provinceName = 'Nakhon Sawan' }: 
         churches: Math.round(actualData2024.churches * 0.95),
         villages: Math.round(actualData2024.villages * 0.95),
         members: Math.round(parseInt(actualData2024.joined.replace(/,/g, ''), 10) * 0.9).toLocaleString(),
+        baptized: Math.round(parseInt(actualData2024.baptized.replace(/,/g, ''), 10) * 0.9).toLocaleString(),
         districts: actualData2024.districts.map(d => ({
             name: d.name,
             churches: Math.round(d.churches * 0.95),
             villages: Math.round(d.villages * 0.95),
-            members: Math.round(parseInt(d.joined.replace(/,/g, ''), 10) * 0.9).toLocaleString()
+            members: Math.round(parseInt(d.joined.replace(/,/g, ''), 10) * 0.9).toLocaleString(),
+            baptized: Math.round(parseInt(d.baptized.replace(/,/g, ''), 10) * 0.9).toLocaleString()
         }))
     } : EXPECTED_DATA;
 
