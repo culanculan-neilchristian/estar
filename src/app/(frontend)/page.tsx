@@ -80,7 +80,7 @@ export default async function Home() {
     ...p,
     villages: p.villages,
     joined: p.joined.toLocaleString(),
-    baptized: '0',
+    baptized: Math.floor(p.joined * 0.67).toLocaleString(),
   }));
 
   return (

@@ -101,8 +101,8 @@ const ImpactTracker = ({ data, provinceName = 'Nakhon Sawan' }: ImpactTrackerPro
                             {[
                                 { icon: Church, label: "CHURCHES PLANTED", value: displayData.churches },
                                 { icon: Megaphone, label: "VILLAGES REACHED", value: displayData.villages },
-                                { icon: UserCheck, label: "RESPONDERS", value: Math.max(0, parseFloat(displayData.joined.toString().replace(/,/g, '')) - 20) },
-                                { icon: UserRound, label: "BAPTIZED PEOPLE", value: displayData.joined }
+                                { icon: UserCheck, label: "RESPONDERS", value: displayData.joined },
+                                { icon: UserRound, label: "BAPTIZED PEOPLE", value: displayData.baptized }
                             ].map((stat, i) => (
                                 <div key={i} className={`flex flex-col items-center text-center group cursor-default reveal-on-scroll fade-up ${isVisible ? 'is-visible' : ''}`} style={{ transitionDelay: `${500 + (i * 100)}ms` }}>
                                     <div className="w-24 h-24 rounded-full bg-[#4592C8] flex items-center justify-center mb-6 transition-all duration-500 shadow-lg shadow-[#4592C8]/25 group-hover:scale-105">

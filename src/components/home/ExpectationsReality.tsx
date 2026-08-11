@@ -64,6 +64,7 @@ const ResultCard = ({ data, isVisible, provinceName }: { data: ResultData; isVis
     const displayChurches = activeDistrictData ? activeDistrictData.churches : data.churches;
     const displayVillages = activeDistrictData ? activeDistrictData.villages : data.villages;
     const displayMembers = activeDistrictData ? activeDistrictData.members : data.members;
+    const displayBaptized = activeDistrictData ? activeDistrictData.baptized : data.baptized;
 
     // Map the ResultData to DistrictStats format for the SVG map component
     const mapStats = data.districts.map(d => ({
@@ -117,7 +118,7 @@ const ResultCard = ({ data, isVisible, provinceName }: { data: ResultData; isVis
                     <UserCheck className="w-6 h-6 text-[#2E7AB8]" />
                 </div>
                 <span className="text-2xl font-semibold text-[#023862]">
-                    {isVisible ? <CountUp end={Math.max(0, parseFloat(displayMembers.replace(/,/g, '')) - 20)} duration={1500} /> : '0'}
+                    {isVisible ? <CountUp end={parseFloat((displayMembers || "0").replace(/,/g, ''))} duration={1500} /> : '0'}
                 </span>
                 <span className="text-[9px] font-semibold text-[#023862]/70 uppercase tracking-widest mt-1 text-center whitespace-nowrap">RESPONDERS</span>
             </div>
@@ -126,7 +127,7 @@ const ResultCard = ({ data, isVisible, provinceName }: { data: ResultData; isVis
                     <UserRound className="w-6 h-6 text-[#2E7AB8]" />
                 </div>
                 <span className="text-2xl font-semibold text-[#023862]">
-                    {isVisible ? <CountUp end={parseFloat(displayMembers.replace(/,/g, ''))} duration={1500} /> : '0'}
+                    {isVisible ? <CountUp end={parseFloat((displayBaptized || "0").replace(/,/g, ''))} duration={1500} /> : '0'}
                 </span>
                 <span className="text-[9px] font-semibold text-[#023862]/70 uppercase tracking-widest mt-1 text-center whitespace-nowrap">BAPTIZED PEOPLE</span>
             </div>
