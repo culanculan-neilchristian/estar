@@ -7,11 +7,11 @@ import { useScrollReveal } from '@/hooks/useScrollReveal';
 
 const TIMELINE_DATA = [
     { year: 2021, provinces: ['Bangkok'] },
-    { year: 2022, provinces: ['Bangkok', 'Samut Prakan', 'Nonthaburi'] },
-    { year: 2023, provinces: ['Bangkok', 'Samut Prakan', 'Nonthaburi', 'Pathum Thani', 'Phra Nakhon Si Ayutthaya'] },
-    { year: 2024, provinces: ['Bangkok', 'Samut Prakan', 'Nonthaburi', 'Pathum Thani', 'Phra Nakhon Si Ayutthaya', 'Ang Thong', 'Lop Buri', 'Sing Buri'] },
-    { year: 2025, provinces: ['Bangkok', 'Samut Prakan', 'Nonthaburi', 'Pathum Thani', 'Phra Nakhon Si Ayutthaya', 'Ang Thong', 'Lop Buri', 'Sing Buri', 'Chai Nat', 'Saraburi', 'Chon Buri'] },
-    { year: 2026, provinces: ['Bangkok', 'Samut Prakan', 'Nonthaburi', 'Pathum Thani', 'Phra Nakhon Si Ayutthaya', 'Ang Thong', 'Lop Buri', 'Sing Buri', 'Chai Nat', 'Saraburi', 'Chon Buri', 'Rayong', 'Chanthaburi', 'Trat', 'Chachoengsao', 'Prachin Buri', 'Nakhon Nayok', 'Sa Kaeo', 'Nakhon Ratchasima'] },
+    { year: 2022, provinces: ['Bangkok', 'Samut Prakan', 'Nonthaburi', 'Chiang Mai', 'Phuket'] },
+    { year: 2023, provinces: ['Bangkok', 'Samut Prakan', 'Nonthaburi', 'Chiang Mai', 'Phuket', 'Chon Buri', 'Nakhon Ratchasima', 'Songkhla', 'Khon Kaen'] },
+    { year: 2024, provinces: ['Bangkok', 'Samut Prakan', 'Nonthaburi', 'Chiang Mai', 'Phuket', 'Chon Buri', 'Nakhon Ratchasima', 'Songkhla', 'Khon Kaen', 'Udon Thani', 'Surat Thani', 'Phra Nakhon Si Ayutthaya', 'Ubon Ratchathani', 'Chiang Rai', 'Rayong', 'Nakhon Sawan'] },
+    { year: 2025, provinces: ['Bangkok', 'Samut Prakan', 'Nonthaburi', 'Chiang Mai', 'Phuket', 'Chon Buri', 'Nakhon Ratchasima', 'Songkhla', 'Khon Kaen', 'Udon Thani', 'Surat Thani', 'Phra Nakhon Si Ayutthaya', 'Ubon Ratchathani', 'Chiang Rai', 'Rayong', 'Nakhon Sawan', 'Buri Ram', 'Surin', 'Si Sa Ket', 'Chaiyaphum', 'Chanthaburi', 'Trat', 'Prachin Buri', 'Nakhon Nayok', 'Sa Kaeo', 'Lop Buri', 'Nakhon Si Thammarat'] },
+    { year: 2026, provinces: ['Bangkok', 'Samut Prakan', 'Nonthaburi', 'Chiang Mai', 'Phuket', 'Chon Buri', 'Nakhon Ratchasima', 'Songkhla', 'Khon Kaen', 'Udon Thani', 'Surat Thani', 'Phra Nakhon Si Ayutthaya', 'Ubon Ratchathani', 'Chiang Rai', 'Rayong', 'Nakhon Sawan', 'Buri Ram', 'Surin', 'Si Sa Ket', 'Chaiyaphum', 'Chanthaburi', 'Trat', 'Prachin Buri', 'Nakhon Nayok', 'Sa Kaeo', 'Lop Buri', 'Nakhon Si Thammarat', 'Nong Bua Lam Phu', 'Bueng Kan', 'Amnat Charoen', 'Yasothon', 'Chai Nat', 'Saraburi', 'Ang Thong', 'Sing Buri', 'Phitsanulok', 'Kamphaeng Phet', 'Tak', 'Krabi', 'Trang'] },
 ];
 
 const ProvincesReached = () => {
