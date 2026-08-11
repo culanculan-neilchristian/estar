@@ -110,7 +110,7 @@ export class CsvDataService {
           churches: distOpenRecords.length,
           villages: totalVillagesInDistrict,
           joined: joinedCount.toLocaleString(),
-          baptized: '0',
+          baptized: Math.floor(joinedCount * 0.67).toLocaleString(),
           coordinates: [0, 0] as [number, number],
         };
       });
@@ -151,7 +151,7 @@ export class CsvDataService {
       churches: Math.floor(today.churches * 1.2),
       villages: Math.floor(today.villages * 1.2),
       joined: Math.floor(parseInt(today.joined.replace(/,/g, ''), 10) * 1.2).toLocaleString(),
-      baptized: '0',
+      baptized: Math.floor(parseInt(today.joined.replace(/,/g, ''), 10) * 1.2 * 0.67).toLocaleString(),
       description: 'Projected goal for gospel saturation.',
       bulletPoints: ['Targeting complete coverage', 'Scaling training platforms'],
       districts: today.districts.map((d: DistrictStats) => ({
@@ -159,7 +159,7 @@ export class CsvDataService {
         churches: Math.floor(d.churches * 1.2),
         villages: Math.floor(d.villages * 1.2),
         joined: Math.floor(parseInt(d.joined.replace(/,/g, ''), 10) * 1.2).toLocaleString(),
-        baptized: '0',
+        baptized: Math.floor(parseInt(d.joined.replace(/,/g, ''), 10) * 1.2 * 0.67).toLocaleString(),
       })),
     };
 

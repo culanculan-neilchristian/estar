@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Church, Megaphone, UserRound } from 'lucide-react';
+import { Church, Megaphone, UserRound, UserCheck } from 'lucide-react';
 import { PROVINCE_SVG_MAPS } from '@/data/provinceDistrictPaths';
 import { NAKHON_SAWAN_DUMMY_DATA, DistrictStats } from '@/data/dummyProvinceData';
 
@@ -118,8 +118,12 @@ const NakhonSawanSvgMap: React.FC<NakhonSawanSvgMapProps> = ({
                                 <span className="text-xl font-semibold text-white leading-none">{districtStats?.villages || 0}</span>
                             </div>
                             <div className="flex items-center gap-3">
-                                <UserRound size={18} className="text-white" />
+                                <UserCheck size={18} className="text-white" />
                                 <span className="text-xl font-semibold text-white leading-none">{districtStats?.joined || 0}</span>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <UserRound size={18} className="text-white" />
+                                <span className="text-xl font-semibold text-white leading-none">{districtStats?.baptized || 0}</span>
                             </div>
                         </div>
                     </div>
