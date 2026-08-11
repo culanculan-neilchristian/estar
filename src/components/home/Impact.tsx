@@ -45,7 +45,7 @@ const ImpactContent = ({ stats }: ImpactProps) => {
 
     return (
         <div className="flex flex-col items-start w-full">
-            <h2 className="heading-2 mb-4">Our Impact So Far</h2>
+            <h2 className="heading-2 mb-4">Our Impact Across Thailand</h2>
             
             <p className="paragraph mb-10">
                 In just over a year, our support has led to measurable, Spirit-led transformation across Thailand. The

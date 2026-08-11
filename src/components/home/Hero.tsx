@@ -48,9 +48,9 @@ const Hero = ({ stats, provinceStats, activeProvince, onProvinceSelect }: HeroPr
                 {/* Right Side: Content */}
                 <div className="w-full md:w-[60%] flex flex-col items-start gap-12 mt-10 md:mt-0 text-white">
                     <div className="flex flex-col items-start gap-4">
-                        <span className={`eyebrow text-white reveal-on-scroll fade-up ${isVisible ? 'is-visible' : ''}`}>ETERNAL IMPACT IN THAILAND</span>
+                        <span className={`eyebrow text-white reveal-on-scroll fade-up ${isVisible ? 'is-visible' : ''}`}>THE GOSPEL MOVEMENT ACROSS THAILAND</span>
                         <h1 className={`heading-1 text-white reveal-on-scroll fade-up delay-100 ${isVisible ? 'is-visible' : ''}`}>
-                            eStar Thailand & AFT
+                            Eternal Impact in Thailand
                         </h1>
                         <div className="flex flex-col gap-5">
                             <p className={`paragraph text-white reveal-on-scroll fade-up delay-200 ${isVisible ? 'is-visible' : ''}`}>
