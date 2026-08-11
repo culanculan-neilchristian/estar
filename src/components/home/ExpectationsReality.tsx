@@ -57,6 +57,14 @@ const ACTUAL_DATA: ResultData = {
 const ResultCard = ({ data, isVisible, provinceName }: { data: ResultData; isVisible: boolean; provinceName: string }) => {
     const [selectedDistrict, setSelectedDistrict] = React.useState<string | null>(null);
 
+    const activeDistrictData = selectedDistrict 
+        ? data.districts.find(d => d.name === selectedDistrict)
+        : null;
+
+    const displayChurches = activeDistrictData ? activeDistrictData.churches : data.churches;
+    const displayVillages = activeDistrictData ? activeDistrictData.villages : data.villages;
+    const displayMembers = activeDistrictData ? activeDistrictData.members : data.members;
+
     // Map the ResultData to DistrictStats format for the SVG map component
     const mapStats = data.districts.map(d => ({
         id: d.name.toLowerCase().replace(/\s+/g, '-'),
@@ -91,7 +99,7 @@ const ResultCard = ({ data, isVisible, provinceName }: { data: ResultData; isVis
                     <Church className="w-6 h-6 text-[#2E7AB8]" />
                 </div>
                 <span className="text-2xl font-semibold text-[#023862]">
-                    {isVisible ? <CountUp end={data.churches} duration={1500} /> : '0'}
+                    {isVisible ? <CountUp end={displayChurches} duration={1500} /> : '0'}
                 </span>
                 <span className="text-[9px] font-semibold text-[#023862]/70 uppercase tracking-widest mt-1 text-center whitespace-nowrap">CHURCHES PLANTED</span>
             </div>
@@ -100,7 +108,7 @@ const ResultCard = ({ data, isVisible, provinceName }: { data: ResultData; isVis
                     <Megaphone className="w-6 h-6 text-[#2E7AB8]" />
                 </div>
                 <span className="text-2xl font-semibold text-[#023862]">
-                    {isVisible ? <CountUp end={data.villages} duration={1500} /> : '0'}
+                    {isVisible ? <CountUp end={displayVillages} duration={1500} /> : '0'}
                 </span>
                 <span className="text-[9px] font-semibold text-[#023862]/70 uppercase tracking-widest mt-1 text-center whitespace-nowrap">VILLAGES REACHED</span>
             </div>
@@ -109,7 +117,7 @@ const ResultCard = ({ data, isVisible, provinceName }: { data: ResultData; isVis
                     <UserCheck className="w-6 h-6 text-[#2E7AB8]" />
                 </div>
                 <span className="text-2xl font-semibold text-[#023862]">
-                    {isVisible ? <CountUp end={Math.max(0, parseFloat(data.members.replace(/,/g, '')) - 20)} duration={1500} /> : '0'}
+                    {isVisible ? <CountUp end={Math.max(0, parseFloat(displayMembers.replace(/,/g, '')) - 20)} duration={1500} /> : '0'}
                 </span>
                 <span className="text-[9px] font-semibold text-[#023862]/70 uppercase tracking-widest mt-1 text-center whitespace-nowrap">RESPONDERS</span>
             </div>
@@ -118,7 +126,7 @@ const ResultCard = ({ data, isVisible, provinceName }: { data: ResultData; isVis
                     <UserRound className="w-6 h-6 text-[#2E7AB8]" />
                 </div>
                 <span className="text-2xl font-semibold text-[#023862]">
-                    {isVisible ? <CountUp end={parseFloat(data.members.replace(/,/g, ''))} duration={1500} /> : '0'}
+                    {isVisible ? <CountUp end={parseFloat(displayMembers.replace(/,/g, ''))} duration={1500} /> : '0'}
                 </span>
                 <span className="text-[9px] font-semibold text-[#023862]/70 uppercase tracking-widest mt-1 text-center whitespace-nowrap">BAPTIZED PEOPLE</span>
             </div>

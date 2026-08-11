@@ -20,11 +20,17 @@ const ExponentialResults = ({ data, provinceName = 'Nakhon Sawan' }: Exponential
     const timelineData = data;
     const districts = timelineData?.districts || [];
 
+    const selectedDistrictData = selectedDistrict ? districts.find(d => d.name === selectedDistrict) : null;
+    
+    const displayChurches = selectedDistrictData ? selectedDistrictData.churches : (timelineData?.churches || 0);
+    const displayVillages = selectedDistrictData ? selectedDistrictData.villages : (timelineData?.villages || 0);
+    const displayJoined = selectedDistrictData ? selectedDistrictData.joined : (timelineData?.joined || "0");
+
     const totals = [
-        { icon: Church, value: timelineData?.churches.toString() || "0", label: "CHURCHES PLANTED" },
-        { icon: Megaphone, value: timelineData?.villages.toString() || "0", label: "VILLAGES REACHED" },
-        { icon: UserCheck, value: Math.max(0, parseFloat((timelineData?.joined || "0").replace(/,/g, '')) - 20), label: "RESPONDERS" },
-        { icon: UserRound, value: timelineData?.joined || "0", label: "BAPTIZED PEOPLE" }
+        { icon: Church, value: displayChurches.toString(), label: "CHURCHES PLANTED" },
+        { icon: Megaphone, value: displayVillages.toString(), label: "VILLAGES REACHED" },
+        { icon: UserCheck, value: Math.max(0, parseFloat(displayJoined.replace(/,/g, '')) - 20), label: "RESPONDERS" },
+        { icon: UserRound, value: displayJoined, label: "BAPTIZED PEOPLE" }
     ];
 
     return (
