@@ -27,7 +27,7 @@ interface ResultData {
 }
 
 const EXPECTED_DATA: ResultData = {
-    title: "Expected 2025 Results",
+    title: "Expected 2026 Results",
     churches: 311,
     villages: 311,
     members: "3,200",
@@ -162,7 +162,7 @@ const ExpectationsReality = ({ actualData2024, provinceName = 'Nakhon Sawan' }: 
 
     // Dynamically project dynamicExpected results based on actual goals
     const dynamicExpected: ResultData = actualData2024 ? {
-        title: "Expected 2025 Results",
+        title: "Expected 2026 Results",
         churches: Math.round(actualData2024.churches * 0.95),
         villages: Math.round(actualData2024.villages * 0.95),
         members: Math.round(parseInt(actualData2024.joined.replace(/,/g, ''), 10) * 0.9).toLocaleString(),
