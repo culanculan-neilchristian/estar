@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Hero from '@/components/home/Hero';
 import ImpactTracker from '@/components/home/ImpactTracker';
 import ExpectationsReality from '@/components/home/ExpectationsReality';
+import ProvincesReached from '@/components/home/ProvincesReached';
 import TransformedLives from '@/components/home/TransformedLives';
 import ExponentialResults from '@/components/home/ExponentialResults';
 import { TimelineStateData } from '@/data/dummyProvinceData';
@@ -41,6 +42,7 @@ export default function ImpactClient({ stats, provinceStats, allProvincesStats }
       />
       <ImpactTracker data={activeStats} provinceName={selectedProvince} />
       <ExpectationsReality actualData2024={activeStats[1]} provinceName={selectedProvince} />
+      <ProvincesReached />
       <TransformedLives />
       <ExponentialResults data={activeStats[4]} provinceName={selectedProvince} />
     </main>

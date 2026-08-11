@@ -27,7 +27,7 @@ interface ResultData {
 }
 
 const EXPECTED_DATA: ResultData = {
-    title: "Expected 2024 Results",
+    title: "Expected 2025 Results",
     churches: 311,
     villages: 311,
     members: "3,200",
@@ -40,7 +40,7 @@ const EXPECTED_DATA: ResultData = {
 };
 
 const ACTUAL_DATA: ResultData = {
-    title: "Actual 2024 Results",
+    title: "Actual 2026 Results",
     churches: 325,
     villages: 314, // Roughly based on church count
     members: "3,782",
@@ -146,7 +146,7 @@ const ExpectationsReality = ({ actualData2024, provinceName = 'Nakhon Sawan' }: 
 
     // Map the dynamic TimelineStateData to the ResultData format
     const dynamicActual: ResultData = actualData2024 ? {
-        title: "Actual 2024 Results",
+        title: "Actual 2026 Results",
         churches: actualData2024.churches,
         villages: actualData2024.villages,
         members: actualData2024.joined,
@@ -162,7 +162,7 @@ const ExpectationsReality = ({ actualData2024, provinceName = 'Nakhon Sawan' }: 
 
     // Dynamically project dynamicExpected results based on actual goals
     const dynamicExpected: ResultData = actualData2024 ? {
-        title: "Expected 2024 Results",
+        title: "Expected 2025 Results",
         churches: Math.round(actualData2024.churches * 0.95),
         villages: Math.round(actualData2024.villages * 0.95),
         members: Math.round(parseInt(actualData2024.joined.replace(/,/g, ''), 10) * 0.9).toLocaleString(),
