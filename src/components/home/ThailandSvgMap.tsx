@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Church, Megaphone, UserRound } from 'lucide-react';
+import { Church, Megaphone, UserRound, UserCheck } from 'lucide-react';
 import { THAILAND_SVG_DATA } from '@/data/thailandPaths';
 import { THAILAND_DUMMY_DATA } from '@/data/thailandDummyData';
 import { DistrictStats } from '@/data/dummyProvinceData';
@@ -114,8 +114,12 @@ const ThailandSvgMap: React.FC<ThailandSvgMapProps> = ({
                                 <span className="text-xl font-semibold text-black leading-none">{provinceStats?.villages || 0}</span>
                             </div>
                             <div className="flex items-center gap-3">
-                                <UserRound size={18} className="text-[#002E53]" />
+                                <UserCheck size={18} className="text-[#002E53]" />
                                 <span className="text-xl font-semibold text-black leading-none">{provinceStats?.joined || 0}</span>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <UserRound size={18} className="text-[#002E53]" />
+                                <span className="text-xl font-semibold text-black leading-none">{provinceStats?.baptized || 0}</span>
                             </div>
                         </div>
                     </div>
