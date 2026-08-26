@@ -1,5 +1,5 @@
 import HomeClient from '@/components/home/HomeClient';
-import { CsvDataService } from '@/services/csv-data-service';
+import { BigQueryDataService } from '@/services/bigquery-data-service';
 import { DistrictStats } from '@/data/dummyProvinceData';
 import { normalizeProvince, getThaiProvinceName } from '@/utils/province-utils';
 
@@ -10,21 +10,24 @@ const OPEN_STATUS = '\u0e40\u0e1b\u0e34\u0e14\u0e2d\u0e22\u0e39\u0e48';
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  const churches = await CsvDataService.getAllChurches();
+  const churches = await BigQueryDataService.getAllChurches();
   const dynamicProvinces = Object.keys(PROVINCE_SVG_MAPS);
   const allProvincesStats: Record<string, Record<number, any>> = {};
   for (const prov of dynamicProvinces) {
-    allProvincesStats[prov] = await CsvDataService.getImpactTrackerStats(getThaiProvinceName(prov));
+    allProvincesStats[prov] = await BigQueryDataService.getImpactTrackerStats(getThaiProvinceName(prov));
   }
 
   // Calculate Global Stats
+  const globalBelievers = await BigQueryDataService.getGlobalBelieverStats();
+  const provinceBelievers = await BigQueryDataService.getProvinceBelieverStats();
+
   const openChurches = churches.filter(c => c.status?.trim() === OPEN_STATUS);
   const totalChurches = openChurches.length;
   // Cumulative Footprint (All provinces/villages ever reached)
   const totalProvincesCount = [...new Set(churches.map(c => c.province?.trim()).filter(Boolean))].length;
 
   const totalVillagesCount = churches.reduce((sum, c) => sum + (c.village || 0), 0);
-  const totalMembers = openChurches.reduce((sum, c) => sum + (c.participate || 0), 0);
+  const totalMembers = globalBelievers.joined;
 
   // Impact percentage based on the 84k villages mentioned in the text
   const impactPercentage = totalVillagesCount > 0 ? (totalVillagesCount / 84000) * 100 : 0;
@@ -34,6 +37,7 @@ export default async function Home() {
     totalProvinces: totalProvincesCount,
     totalVillages: totalVillagesCount,
     totalMembers,
+    totalBaptized: globalBelievers.baptized,
     impactPercentage,
   };
 
@@ -67,7 +71,6 @@ export default async function Home() {
 
     if (church.status?.trim() === OPEN_STATUS) {
       acc[provinceName].churches += 1;
-      acc[provinceName].joined += (church.participate || 0);
     }
 
     acc[provinceName].villages += (church.village || 0);
@@ -76,12 +79,15 @@ export default async function Home() {
   }, {} as Record<string, ProvinceAccumulator>);
 
   // Convert map to array of objects compatible with DistrictStats interface
-  const provinceStats: DistrictStats[] = Object.values(provinceStatsMap).map(p => ({
-    ...p,
-    villages: p.villages,
-    joined: p.joined.toLocaleString(),
-    baptized: Math.floor(p.joined * 0.67).toLocaleString(),
-  }));
+  const provinceStats: DistrictStats[] = Object.values(provinceStatsMap).map(p => {
+    const pBelievers = provinceBelievers[p.name] || { joined: 0, baptized: 0 };
+    return {
+      ...p,
+      villages: p.villages,
+      joined: pBelievers.joined.toLocaleString(),
+      baptized: pBelievers.baptized.toLocaleString(),
+    };
+  });
 
   return (
     <HomeClient

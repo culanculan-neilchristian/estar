@@ -14,6 +14,7 @@ interface HeroProps {
         totalProvinces: number;
         totalVillages: number;
         totalMembers: number;
+        totalBaptized?: number;
         impactPercentage: number;
     };
     provinceStats?: DistrictStats[];

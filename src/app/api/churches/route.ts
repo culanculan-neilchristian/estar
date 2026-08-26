@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { CsvDataService } from '@/services/csv-data-service';
+import { BigQueryDataService } from '@/services/bigquery-data-service';
 
 /**
- * API Route to fetch filtered church data from the CSV
+ * API Route to fetch filtered church data from the BigQuery
  * Query Params: ?province=...&district=...
  */
 export async function GET(request: NextRequest) {
@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
     const province = searchParams.get('province');
     const district = searchParams.get('district');
 
-    let data = await CsvDataService.getAllChurches();
+    let data = await BigQueryDataService.getAllChurches();
 
     if (province) {
       data = data.filter((item) => item.province === province);

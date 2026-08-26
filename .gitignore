@@ -49,3 +49,4 @@ next-env.d.ts
 !/uploads/data/
 /uploads/data/*
 !/uploads/data/Studio 2 - Studio 2.csv (1).csv
+google-credentials.json

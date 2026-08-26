@@ -9,19 +9,23 @@ import TransformedLives from '@/components/home/TransformedLives';
 import ExponentialResults from '@/components/home/ExponentialResults';
 import { TimelineStateData } from '@/data/dummyProvinceData';
 
+import { TimelineDataPoint } from '@/components/home/ProvincesReached';
+
 interface ImpactClientProps {
   stats: {
     totalChurches: number;
     totalProvinces: number;
     totalVillages: number;
     totalMembers: number;
+    totalBaptized?: number;
     impactPercentage: number;
   };
   provinceStats: any[];
   allProvincesStats: Record<string, Record<number, TimelineStateData>>;
+  timelineData?: TimelineDataPoint[];
 }
 
-export default function ImpactClient({ stats, provinceStats, allProvincesStats }: ImpactClientProps) {
+export default function ImpactClient({ stats, provinceStats, allProvincesStats, timelineData }: ImpactClientProps) {
   const [selectedProvince, setSelectedProvince] = useState<string>('Nakhon Sawan');
 
   // Lookup the timeline stats for the active province (default to Nakhon Sawan if not found)
@@ -42,7 +46,7 @@ export default function ImpactClient({ stats, provinceStats, allProvincesStats }
       />
       <ImpactTracker data={activeStats} provinceName={selectedProvince} />
       <ExpectationsReality actualData2024={activeStats[1]} provinceName={selectedProvince} />
-      <ProvincesReached />
+      <ProvincesReached timelineData={timelineData} />
       <TransformedLives />
       <ExponentialResults data={activeStats[4]} provinceName={selectedProvince} />
     </main>

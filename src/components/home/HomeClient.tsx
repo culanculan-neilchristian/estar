@@ -16,6 +16,7 @@ interface HomeClientProps {
     totalProvinces: number;
     totalVillages: number;
     totalMembers: number;
+    totalBaptized?: number;
     impactPercentage: number;
   };
   provinceStats: any[];
