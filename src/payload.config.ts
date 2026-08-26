@@ -6,7 +6,6 @@ import { fileURLToPath } from 'url';
 import sharp from 'sharp';
 
 import { Users } from './collections/Users';
-import { DataUploads } from './collections/DataUploads';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -20,7 +19,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, DataUploads],
+  collections: [Users],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

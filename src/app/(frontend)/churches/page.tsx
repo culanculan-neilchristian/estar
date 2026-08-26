@@ -1,7 +1,7 @@
 import React from 'react';
 import { Church, MapPin, Info, Search } from 'lucide-react';
 import Container from '@/components/layout/Container';
-import { CsvDataService } from '@/services/csv-data-service';
+import { BigQueryDataService } from '@/services/bigquery-data-service';
 
 export const metadata = {
   title: 'Churches in Thailand | eStar Foundation',
@@ -9,7 +9,7 @@ export const metadata = {
 };
 
 export default async function ChurchesPage() {
-  const churches = await CsvDataService.getAllChurches();
+  const churches = await BigQueryDataService.getAllChurches();
   
   // High-level stats for the header
   const totalChurches = churches.length;

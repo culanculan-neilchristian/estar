@@ -9,6 +9,7 @@ interface ImpactProps {
         totalProvinces: number;
         totalVillages: number;
         totalMembers: number;
+        totalBaptized?: number;
         impactPercentage: number;
     };
 }
@@ -28,7 +29,7 @@ const ImpactContent = ({ stats }: ImpactProps) => {
         },
         {
             icon: Users,
-            value: Math.floor(stats.totalMembers * 0.67).toLocaleString(),
+            value: (stats.totalBaptized || Math.floor(stats.totalMembers * 0.67)).toLocaleString(),
             label: "BAPTIZED PEOPLE"
         },
         {
