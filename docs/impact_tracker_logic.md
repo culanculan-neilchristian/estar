@@ -3,7 +3,6 @@
 The Impact Tracker shows timeline stats for Nakhon Sawan using the same one CSV file as the Hero map.
 
 ## Source
-
 `src/services/csv-data-service.ts` reads:
 
 `uploads/data/Studio 2 - Studio 2.csv (1).csv`
